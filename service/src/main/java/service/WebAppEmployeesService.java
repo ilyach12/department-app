@@ -1,0 +1,141 @@
+package service;
+
+import model.Employees;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.sql.Date;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * This a service class and he getting data from REST service by uri.
+ * {@code EmployeeService} using RestTemplate class for the implementation
+ * of data access.
+ */
+@Service
+public class WebAppEmployeesService implements IEmployeesService {
+
+    /**
+     * Default url by REST service for getting data about employees.
+     */
+    private final String HOST_URL = "http://localhost:8080/server/employees";
+
+    /**
+     * {@code getAll} method getting all employees from REST.
+     *
+     * @return List of all employees
+     */
+    @Override
+    public List<Employees> getAll(){
+        RestTemplate restTemplate = new RestTemplate();
+        Employees[] employees = restTemplate.getForObject(HOST_URL, Employees[].class);
+        return Arrays.asList(employees);
+    }
+
+    /**
+     * Find all employees who has a certain by taking parameter
+     * date of b-day.
+     *
+     * @param birthday takes date f birthday
+     * @return List of all found employees with this b-day date
+     */
+    @Override
+    public List<Employees> getEmployeesByBirthdayDate(Date birthday) {
+        RestTemplate restTemplate = new RestTemplate();
+        String uri = "/birthday/{birthday}";
+        Map<String, Date> map = new HashMap<>();
+        map.put("birthday", birthday);
+
+        Employees[] employees = restTemplate.getForObject(HOST_URL + uri, Employees[].class, map);
+        return Arrays.asList(employees);
+    }
+
+    /**
+     * Find all employees who has a b-da date between taking parameters
+     * date of b-days.
+     *
+     * @param birthday first b-day date
+     * @param birthday1 second b-day date
+     * @return List of all fond employees who has b-day date between taking parameters
+     */
+    @Override
+    public List<Employees> getEmployeesByBirthdayDateBetween(Date birthday, Date birthday1) {
+        RestTemplate restTemplate = new RestTemplate();
+        String uri = "/birthday/between/{birthday}/{birthday1}";
+        Map<String, Date> map = new HashMap<>(2);
+        map.put("birthday", birthday);
+        map.put("birthday1", birthday1);
+
+        Employees[] employees = restTemplate.getForObject(HOST_URL + uri, Employees[].class, map);
+        return Arrays.asList(employees);
+    }
+
+    /**
+     * Getting all employees by department where employees work.
+     *
+     * @param departmentName name of searching department
+     * @return List of employees who works in founded department
+     */
+    @Override
+    public List<Employees> getEmployeesByDepartmentName(String departmentName) {
+        RestTemplate restTemplate = new RestTemplate();
+        String uri = "/department/{department}";
+        Map<String, String> map = new HashMap<>();
+        map.put("department", departmentName);
+
+        Employees[] employees = restTemplate.getForObject(HOST_URL + uri, Employees[].class, map);
+        return Arrays.asList(employees);
+    }
+
+    /**
+     * {@code insert} inserting new employee in data table.
+     */
+    @Override
+    public void insert(String fullName, String department, Date birthday, int salary) {
+        RestTemplate restTemplate = new RestTemplate();
+        String uri = "/addNewEmployee/employeeName/{fullName}/department/{department}/" +
+                "birthday/{birthday}/salary/{salary}";
+        Map<String, Object> map = new HashMap<>(4);
+        map.put("fullName", fullName);
+        map.put("department", department);
+        map.put("birthday", birthday);
+        map.put("salary", salary);
+        restTemplate.postForLocation(HOST_URL + uri, Employees.class, map);
+    }
+
+    /**
+     * Update employee data in table by ID of this employee.
+     */
+    @Override
+    public void update(Long id, String fullName, String department, Date birthday,
+                       int salary) {
+        RestTemplate restTemplate = new RestTemplate();
+        String uri = "/updatingEmployeeData/employeeId/{id}/employeeName/{fullName}/" +
+                "department/{department}/birthday/{birthday}/salary/{salary}";
+        Map<String, Object> map = new HashMap<>(5);
+        map.put("id", id);
+        map.put("fullName", fullName);
+        map.put("department", department);
+        map.put("birthday", birthday);
+        map.put("salary", salary);
+        restTemplate.postForLocation(HOST_URL + uri, Employees.class, map);
+    }
+
+    /**
+     * Delete employee from database by name of this employee.
+     *
+     * @param id of employee who must be deleted
+     */
+    @Override
+    public void delete(Long id) {
+        RestTemplate restTemplate = new RestTemplate();
+        String uri = "/remove/employee/{id}";
+        Map<String, Long> map = new HashMap<>();
+        map.put("id", id);
+        restTemplate.postForLocation(HOST_URL + uri, Employees.class, map);
+    }
+
+}
