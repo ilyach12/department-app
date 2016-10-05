@@ -10,7 +10,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.test.util.ReflectionTestUtils;
-import service.EmployeesService;
+import service.RestEmployeesService;
 
 import java.sql.Date;
 import java.util.List;
@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 public class EmployeesServiceTest {
 
     private EmbeddedDatabase ds;
-    private EmployeesService employeesService;
+    private RestEmployeesService employeesService;
     private JdbcTemplate template;
 
     @Before
@@ -31,7 +31,7 @@ public class EmployeesServiceTest {
                 .addScript("db/insert-data.sql")
                 .build();
 
-        employeesService = new EmployeesService();
+        employeesService = new RestEmployeesService();
         template = new JdbcTemplate(ds);
         JdbcEmployeesDao employeesDao = new JdbcEmployeesDao();
         employeesDao.setDataSource(ds);

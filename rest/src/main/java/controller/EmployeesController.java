@@ -2,7 +2,7 @@ package controller;
 
 import model.Employees;
 import org.springframework.context.annotation.ComponentScan;
-import service.EmployeesService;
+import service.RestEmployeesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class EmployeesController {
 
     private final Logger logger = LoggerFactory.getLogger(EmployeesController.class);
     @Autowired
-    private EmployeesService employeesService;
+    private RestEmployeesService restEmployeesService;
 
     /**
      * Getting all employees from database.
@@ -37,7 +37,7 @@ public class EmployeesController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public List<Employees> getAllEmployees(){
-        return employeesService.getAll();
+        return restEmployeesService.getAll();
     }
 
     /**
@@ -49,7 +49,7 @@ public class EmployeesController {
      */
     @RequestMapping(value = "/birthday/{birthday}", method = RequestMethod.GET)
     public List<Employees> getEmployeesByBirthdayDate(@PathVariable("birthday") Date birthday){
-        return employeesService.getEmployeesByBirthdayDate(birthday);
+        return restEmployeesService.getEmployeesByBirthdayDate(birthday);
     }
 
     /**
@@ -61,7 +61,7 @@ public class EmployeesController {
      */
     @RequestMapping(value = "/department/{department}", method = RequestMethod.GET)
     public List<Employees> getEmployeesByDepartmentName(@PathVariable("department") String department){
-        return employeesService.getEmployeesByDepartmentName(department);
+        return restEmployeesService.getEmployeesByDepartmentName(department);
     }
 
     /**
@@ -74,7 +74,7 @@ public class EmployeesController {
     @RequestMapping(value = "/birthday/between/{birthday}/{birthday1}", method = RequestMethod.GET)
     public List<Employees> getEmployeesByBirthdayDateBetween(@PathVariable("birthday") Date birthday,
                                                              @PathVariable("birthday1") Date birthday1){
-        return employeesService.getEmployeesByBirthdayDateBetween(birthday, birthday1);
+        return restEmployeesService.getEmployeesByBirthdayDateBetween(birthday, birthday1);
     }
 
     /**
@@ -88,9 +88,9 @@ public class EmployeesController {
                            @PathVariable("department") String department, @PathVariable("birthday") Date birthday,
                            @PathVariable("salary") int salary){
         logger.info("Inserting new data in Employees table...");
-        employeesService.insert(employeeName, department, birthday, salary);
+        restEmployeesService.insert(employeeName, department, birthday, salary);
         logger.info(employeeName + department + birthday + salary + " insertNewDepartment successful");
-        return employeesService.getAll();
+        return restEmployeesService.getAll();
     }
 
     /**
@@ -104,9 +104,9 @@ public class EmployeesController {
     public List<Employees> updateEmployeeDataById(@PathVariable("id") Long id, @PathVariable("employeeName") String employeeName,
                                                   @PathVariable("department") String department, @PathVariable("birthday") Date birthday,
                                                   @PathVariable("salary") int salary){
-        employeesService.update(id, employeeName, department, birthday, salary);
+        restEmployeesService.update(id, employeeName, department, birthday, salary);
         logger.info(employeeName + " updated successful");
-        return employeesService.getAll();
+        return restEmployeesService.getAll();
     }
 
     /**
@@ -117,8 +117,8 @@ public class EmployeesController {
      */
     @RequestMapping(value = "/remove/employee/{id}", method = RequestMethod.POST)
     public List<Employees> deleteEmployeeById(@PathVariable("id") Long id){
-        employeesService.delete(id);
+        restEmployeesService.delete(id);
         logger.info(id + "deleted successful");
-        return employeesService.getAll();
+        return restEmployeesService.getAll();
     }
 }

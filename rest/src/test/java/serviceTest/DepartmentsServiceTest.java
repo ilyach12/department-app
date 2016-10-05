@@ -11,7 +11,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.test.util.ReflectionTestUtils;
-import service.DepartmentsService;
+import service.RestDepartmentsService;
 
 import javax.servlet.ServletException;
 import java.sql.ResultSet;
@@ -27,7 +27,7 @@ public class DepartmentsServiceTest {
 
     private EmbeddedDatabase ds;
     private JdbcTemplate template;
-    private DepartmentsService departmentsService;
+    private RestDepartmentsService departmentsService;
 
     @Before
     public void setUp()throws ServletException {
@@ -37,7 +37,7 @@ public class DepartmentsServiceTest {
                 .addScript("db/insert-data.sql")
                 .build();
 
-        departmentsService = new DepartmentsService();
+        departmentsService = new RestDepartmentsService();
         template = new JdbcTemplate(ds);
         JdbcDepartmentsDao departmentDao = new JdbcDepartmentsDao();
         departmentDao.setDataSource(ds);

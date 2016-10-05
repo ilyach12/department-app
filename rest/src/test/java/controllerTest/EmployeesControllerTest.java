@@ -3,7 +3,7 @@ package controllerTest;
 import controller.EmployeesController;
 import dao.JdbcEmployeesDao;
 import model.Employees;
-import service.EmployeesService;
+import service.RestEmployeesService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +33,7 @@ public class EmployeesControllerTest {
                 .build();
 
         employeesController = new EmployeesController();
-        EmployeesService employeesService = new EmployeesService();
+        RestEmployeesService employeesService = new RestEmployeesService();
         JdbcEmployeesDao employeesDao = new JdbcEmployeesDao();
         employeesDao.setDataSource(ds);
         template = new JdbcTemplate(ds);

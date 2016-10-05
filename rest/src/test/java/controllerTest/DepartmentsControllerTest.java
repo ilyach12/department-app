@@ -4,7 +4,7 @@ import controller.DepartmentsController;
 import dao.JdbcDepartmentsDao;
 import model.Department;
 import model.Employees;
-import service.DepartmentsService;
+import service.RestDepartmentsService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class DepartmentsControllerTest {
                 .addScript("db/insert-data.sql")
                 .build();
 
-        DepartmentsService departmentsService = new DepartmentsService();
+        RestDepartmentsService departmentsService = new RestDepartmentsService();
         departmentsController = new DepartmentsController();
         JdbcDepartmentsDao departmentDao = new JdbcDepartmentsDao();
         template = new JdbcTemplate(ds);

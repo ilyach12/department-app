@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Service
 @ComponentScan("dao")
-public class DepartmentsService implements IDepartmentsService {
+public class RestDepartmentsService implements IDepartmentsService {
 
     @Autowired
     private JdbcDepartmentsDao departmentDao;

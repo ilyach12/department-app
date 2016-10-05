@@ -1,7 +1,7 @@
 package controller;
 
 import org.springframework.context.annotation.ComponentScan;
-import service.DepartmentsService;
+import service.RestDepartmentsService;
 import model.Department;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +26,8 @@ import java.util.List;
 public class DepartmentsController {
 
     private final Logger logger = LoggerFactory.getLogger(DepartmentsController.class);
-
     @Autowired
-    private DepartmentsService departmentsService;
+    private RestDepartmentsService restDepartmentsService;
 
     /**
      * {@code getAllDepartments} getting all departments from database.
@@ -37,7 +36,7 @@ public class DepartmentsController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public List<Department> getAllDepartments(){
-        return departmentsService.getAll();
+        return restDepartmentsService.getAll();
     }
 
     /**
@@ -48,7 +47,7 @@ public class DepartmentsController {
      */
     @RequestMapping(value = "/getAllDepartmentsWithEmployees", method = RequestMethod.GET)
     public List<Department> getAllDepartmentsWithEmployees(){
-        return departmentsService.getAllDepartmentsWithEmployees();
+        return restDepartmentsService.getAllDepartmentsWithEmployees();
     }
 
     /**
@@ -60,7 +59,7 @@ public class DepartmentsController {
      */
     @RequestMapping(value = "/{departmentName}", method = RequestMethod.GET)
     public List<Department> getDepartmentByNameWithEmployees(@PathVariable("departmentName") String departmentName){
-        return departmentsService.getDepartmentByNameWithEmployees(departmentName);
+        return restDepartmentsService.getDepartmentByNameWithEmployees(departmentName);
     }
 
     /**
@@ -73,9 +72,9 @@ public class DepartmentsController {
     public List<Department> insertNewDepartment(@PathVariable("departmentName")
                                                                            String departmentName) {
         logger.info("Creating department: " + departmentName);
-        departmentsService.insert(departmentName);
+        restDepartmentsService.insert(departmentName);
         logger.info("Department " + departmentName + " creating successfully");
-        return departmentsService.getAll();
+        return restDepartmentsService.getAll();
     }
 
     /**
@@ -90,9 +89,9 @@ public class DepartmentsController {
     public List<Department> updateDepartmentNameById(@PathVariable("id") Long id,
                                                      @PathVariable("departmentName") String departmentName){
         logger.info("Updating department name with id: " + id);
-        departmentsService.update(id, departmentName);
+        restDepartmentsService.update(id, departmentName);
         logger.info("Update to " + departmentName + " successfully");
-        return departmentsService.getAll();
+        return restDepartmentsService.getAll();
     }
 
     /**
@@ -105,8 +104,8 @@ public class DepartmentsController {
     public List<Department> deleteDepartmentByName(@PathVariable("departmentName")
                                                                       String departmentName){
         logger.info("Removing " + departmentName + "...");
-        departmentsService.delete(departmentName);
+        restDepartmentsService.delete(departmentName);
         logger.info("Row with name " + departmentName + " removed successfully");
-        return departmentsService.getAll();
+        return restDepartmentsService.getAll();
     }
 }
