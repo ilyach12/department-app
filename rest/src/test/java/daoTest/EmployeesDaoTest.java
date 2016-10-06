@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 public class EmployeesDaoTest {
 
     private EmbeddedDatabase ds;
-    private JdbcEmployeesDao employeesDao;
+    private JdbcEmployeesDao employeesDao = new JdbcEmployeesDao();
     private JdbcTemplate template;
 
     @Before
@@ -29,7 +29,7 @@ public class EmployeesDaoTest {
                 .addScript("db/create-db.sql")
                 .addScript("db/insert-data.sql")
                 .build();
-        employeesDao = new JdbcEmployeesDao();
+
         employeesDao.setDataSource(ds);
         template = new JdbcTemplate(ds);
 

@@ -1,6 +1,7 @@
 package service;
 
 import model.Department;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,9 +19,15 @@ import java.util.Map;
 public class WebAppDepartmentsService implements IDepartmentsService {
 
     /**
-     * Default url by REST service for getting data about departments.
+     * Rest service url for managing department data.
      */
     private final String HOST_URL = "http://localhost:8080/server/departments";
+    private final RestTemplate restTemplate;
+
+    @Autowired
+    public WebAppDepartmentsService(RestTemplate restTemplate){
+        this.restTemplate = restTemplate;
+    }
 
     /**
      * {@code getAll} method getting all departments from REST.
@@ -29,7 +36,6 @@ public class WebAppDepartmentsService implements IDepartmentsService {
      */
     @Override
     public List<Department> getAll(){
-        RestTemplate restTemplate = new RestTemplate();
         Department[] departments = restTemplate.getForObject(HOST_URL, Department[].class);
         return Arrays.asList(departments);
     }
@@ -42,7 +48,6 @@ public class WebAppDepartmentsService implements IDepartmentsService {
      */
     @Override
     public List<Department> getDepartmentByNameWithEmployees(String departmentName){
-        RestTemplate restTemplate = new RestTemplate();
         String uri = "/{departmentName}";
         Map<String, String> map = new HashMap<>();
         map.put("departmentName", departmentName);
@@ -58,7 +63,6 @@ public class WebAppDepartmentsService implements IDepartmentsService {
      */
     @Override
     public List<Department> getAllDepartmentsWithEmployees(){
-        RestTemplate restTemplate = new RestTemplate();
         String uri = "/getAllDepartmentsWithEmployees";
         Department[] departments = restTemplate.getForObject(HOST_URL + uri, Department[].class);
         return Arrays.asList(departments);
@@ -71,7 +75,6 @@ public class WebAppDepartmentsService implements IDepartmentsService {
      */
     @Override
     public void insert(String departmentName){
-        RestTemplate restTemplate = new RestTemplate();
         String uri = "/insertNewRow/departmentName/{departmentName}";
         Map<String, String> map = new HashMap<>();
         map.put("departmentName", departmentName);
@@ -86,7 +89,6 @@ public class WebAppDepartmentsService implements IDepartmentsService {
      */
     @Override
     public void update(Long id, String departmentName){
-        RestTemplate restTemplate = new RestTemplate();
         String uri = "/rename/departmentWithId/{id}/newName/{departmentName}";
         Map<String, Object> map = new HashMap<>(2);
         map.put("id", id);
@@ -101,7 +103,6 @@ public class WebAppDepartmentsService implements IDepartmentsService {
      */
     @Override
     public void delete(String departmentName){
-        RestTemplate restTemplate = new RestTemplate();
         String uri = "/remove/department/{departmentName}";
         Map<String, String> map = new HashMap<>();
         map.put("departmentName", departmentName);

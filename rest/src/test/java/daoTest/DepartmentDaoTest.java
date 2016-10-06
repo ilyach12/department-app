@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
 public class DepartmentDaoTest {
 
     private EmbeddedDatabase ds;
-    private JdbcDepartmentsDao departmentDao;
+    private JdbcDepartmentsDao departmentDao = new JdbcDepartmentsDao();
     private JdbcTemplate template;
 
     @Before
@@ -35,9 +35,8 @@ public class DepartmentDaoTest {
                 .addScript("db/insert-data.sql")
                 .build();
 
-        departmentDao = new JdbcDepartmentsDao();
-        template = new JdbcTemplate(ds);
         departmentDao.setDataSource(ds);
+        template = new JdbcTemplate(ds);
 
         ReflectionTestUtils.setField(departmentDao, "findAllDepartments", "select d.id, d.departmentName, avg(e.salary) " +
                 "as averageSalary from department as d left join employees as e on " +

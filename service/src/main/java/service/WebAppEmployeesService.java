@@ -1,6 +1,7 @@
 package service;
 
 import model.Employees;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,6 +23,12 @@ public class WebAppEmployeesService implements IEmployeesService {
      * Default url by REST service for getting data about employees.
      */
     private final String HOST_URL = "http://localhost:8080/server/employees";
+    private final RestTemplate restTemplate;
+
+    @Autowired
+    public WebAppEmployeesService(RestTemplate restTemplate){
+        this.restTemplate = restTemplate;
+    }
 
     /**
      * {@code getAll} method getting all employees from REST.
@@ -30,7 +37,6 @@ public class WebAppEmployeesService implements IEmployeesService {
      */
     @Override
     public List<Employees> getAll(){
-        RestTemplate restTemplate = new RestTemplate();
         Employees[] employees = restTemplate.getForObject(HOST_URL, Employees[].class);
         return Arrays.asList(employees);
     }
@@ -44,7 +50,6 @@ public class WebAppEmployeesService implements IEmployeesService {
      */
     @Override
     public List<Employees> getEmployeesByBirthdayDate(Date birthday) {
-        RestTemplate restTemplate = new RestTemplate();
         String uri = "/birthday/{birthday}";
         Map<String, Date> map = new HashMap<>();
         map.put("birthday", birthday);
@@ -63,7 +68,6 @@ public class WebAppEmployeesService implements IEmployeesService {
      */
     @Override
     public List<Employees> getEmployeesByBirthdayDateBetween(Date birthday, Date birthday1) {
-        RestTemplate restTemplate = new RestTemplate();
         String uri = "/birthday/between/{birthday}/{birthday1}";
         Map<String, Date> map = new HashMap<>(2);
         map.put("birthday", birthday);
@@ -81,7 +85,6 @@ public class WebAppEmployeesService implements IEmployeesService {
      */
     @Override
     public List<Employees> getEmployeesByDepartmentName(String departmentName) {
-        RestTemplate restTemplate = new RestTemplate();
         String uri = "/department/{department}";
         Map<String, String> map = new HashMap<>();
         map.put("department", departmentName);
@@ -95,7 +98,6 @@ public class WebAppEmployeesService implements IEmployeesService {
      */
     @Override
     public void insert(String fullName, String department, Date birthday, int salary) {
-        RestTemplate restTemplate = new RestTemplate();
         String uri = "/addNewEmployee/employeeName/{fullName}/department/{department}/" +
                 "birthday/{birthday}/salary/{salary}";
         Map<String, Object> map = new HashMap<>(4);
@@ -110,9 +112,7 @@ public class WebAppEmployeesService implements IEmployeesService {
      * Update employee data in table by ID of this employee.
      */
     @Override
-    public void update(Long id, String fullName, String department, Date birthday,
-                       int salary) {
-        RestTemplate restTemplate = new RestTemplate();
+    public void update(Long id, String fullName, String department, Date birthday, int salary) {
         String uri = "/updatingEmployeeData/employeeId/{id}/employeeName/{fullName}/" +
                 "department/{department}/birthday/{birthday}/salary/{salary}";
         Map<String, Object> map = new HashMap<>(5);
@@ -131,7 +131,6 @@ public class WebAppEmployeesService implements IEmployeesService {
      */
     @Override
     public void delete(Long id) {
-        RestTemplate restTemplate = new RestTemplate();
         String uri = "/remove/employee/{id}";
         Map<String, Long> map = new HashMap<>();
         map.put("id", id);

@@ -1,87 +1,102 @@
 package serviceTest;
 
-import model.Department;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.web.client.RestTemplate;
 import service.WebAppDepartmentsService;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 public class DepartmentsServiceTest {
 
-    private WebAppDepartmentsService departmentService;
-    private List<Department> list = new ArrayList<>();
+    private RestTemplate restTemplate = new RestTemplate();
+    private WebAppDepartmentsService departmentsService = new WebAppDepartmentsService(restTemplate);
+    private MockRestServiceServer restServiceServer;
 
     @Before
-    public void initDepartment(){
-        Department department = new Department();
-        department.setId(1L);
-        department.setDepartmentName("Java");
-        department.setEmployeesInThisDepartment(new ArrayList<>());
-        department.setAverageSalary(800);
-
-        Department department1 = new Department();
-        department1.setId(2L);
-        department1.setDepartmentName(".NET");
-        department1.setEmployeesInThisDepartment(new ArrayList<>());
-        department1.setAverageSalary(800);
-
-        list.add(department);
-        list.add(department1);
+    public void setUp(){
+        restServiceServer = MockRestServiceServer.createServer(restTemplate);
     }
 
     @Test
     public void testGetAll(){
-        departmentService = mock(WebAppDepartmentsService.class);
-        when(departmentService.getAll()).thenReturn(list);
-        assertEquals(2, departmentService.getAll().size());
-    }
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/departments"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(
+                        "[{\"id\":0,\"departmentName\":\"null\",\"employeesInThisDepartment\":null,\"averageSalary\":0}]",
+                        MediaType.APPLICATION_JSON));
 
-    @Test
-    public void testGetAllWithEmployees(){
-        departmentService = mock(WebAppDepartmentsService.class);
-        when(departmentService.getAllDepartmentsWithEmployees()).thenReturn(list);
-        assertEquals(2, departmentService.getAllDepartmentsWithEmployees().size());
+        departmentsService.getAll();
+        restServiceServer.verify();
     }
 
     @Test
     public void testGetDepartmentByNameWithEmployees(){
-        departmentService = new WebAppDepartmentsService();
-        List<Department> department = departmentService.getDepartmentByNameWithEmployees("Java");
-        assertEquals(1, department.size());
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/departments/QA"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(
+                        "[{\"id\":0,\"departmentName\":\"null\",\"employeesInThisDepartment\":null,\"averageSalary\":0}]",
+                        MediaType.APPLICATION_JSON));
+
+        departmentsService.getDepartmentByNameWithEmployees("QA");
+        restServiceServer.verify();
+    }
+
+    @Test
+    public void testGetAllDepartmentsWithEmployees(){
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/departments/getAllDepartmentsWithEmployees"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(
+                        "[{\"id\":0,\"departmentName\":\"null\",\"employeesInThisDepartment\":null,\"averageSalary\":0}]",
+                        MediaType.APPLICATION_JSON));
+
+        departmentsService.getAllDepartmentsWithEmployees();
+        restServiceServer.verify();
     }
 
     @Test
     public void testInsert(){
-        departmentService = new WebAppDepartmentsService();
-        departmentService.insert("Test");
-        List<Department> departments = departmentService.getAll();
-        assertEquals(6, departments.size());
-        List<Department> department = departmentService.getDepartmentByNameWithEmployees("Test");
-        assertEquals(1, department.size());
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/departments/insertNewRow/departmentName/Test"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withSuccess(
+                        "{\"id\" : \"0,\"}",
+                        MediaType.APPLICATION_JSON));
 
+        departmentsService.insert("Test");
+        restServiceServer.verify();
     }
 
     @Test
     public void testUpdate(){
-        departmentService = new WebAppDepartmentsService();
-        departmentService.update(107L, "Testing");
-        List<Department> departments = departmentService.getAll();
-        assertEquals(6, departments.size());
-        List<Department> department = departmentService.getDepartmentByNameWithEmployees("Testing");
-        assertEquals(1, department.size());
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/departments/rename/departmentWithId/1/newName/Dep"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withSuccess(
+                        "{\"id\" : \"0,\"}",
+                        MediaType.APPLICATION_JSON));
+        departmentsService.update(1L, "Dep");
+        restServiceServer.verify();
     }
 
     @Test
     public void testDelete(){
-        departmentService = new WebAppDepartmentsService();
-        departmentService.delete("Testing");
-        List<Department> departments = departmentService.getAll();
-        assertEquals(5, departments.size());
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/departments/remove/department/QA"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withSuccess(
+                        "{\"id\" : \"0\"}",
+                        MediaType.APPLICATION_JSON));
+
+        departmentsService.delete("QA");
+        restServiceServer.verify();
     }
 }

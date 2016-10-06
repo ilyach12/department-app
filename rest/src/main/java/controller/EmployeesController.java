@@ -1,15 +1,15 @@
 package controller;
 
 import model.Employees;
-import org.springframework.context.annotation.ComponentScan;
-import service.RestEmployeesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import service.RestEmployeesService;
 
 import java.sql.Date;
 import java.util.List;
@@ -26,9 +26,9 @@ import java.util.List;
 @ComponentScan("service")
 public class EmployeesController {
 
-    private final Logger logger = LoggerFactory.getLogger(EmployeesController.class);
     @Autowired
-    private RestEmployeesService restEmployeesService;
+    private RestEmployeesService employeesService;
+    private final Logger logger = LoggerFactory.getLogger(EmployeesController.class);
 
     /**
      * Getting all employees from database.
@@ -37,7 +37,7 @@ public class EmployeesController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public List<Employees> getAllEmployees(){
-        return restEmployeesService.getAll();
+        return employeesService.getAll();
     }
 
     /**
@@ -49,7 +49,7 @@ public class EmployeesController {
      */
     @RequestMapping(value = "/birthday/{birthday}", method = RequestMethod.GET)
     public List<Employees> getEmployeesByBirthdayDate(@PathVariable("birthday") Date birthday){
-        return restEmployeesService.getEmployeesByBirthdayDate(birthday);
+        return employeesService.getEmployeesByBirthdayDate(birthday);
     }
 
     /**
@@ -61,7 +61,7 @@ public class EmployeesController {
      */
     @RequestMapping(value = "/department/{department}", method = RequestMethod.GET)
     public List<Employees> getEmployeesByDepartmentName(@PathVariable("department") String department){
-        return restEmployeesService.getEmployeesByDepartmentName(department);
+        return employeesService.getEmployeesByDepartmentName(department);
     }
 
     /**
@@ -74,7 +74,7 @@ public class EmployeesController {
     @RequestMapping(value = "/birthday/between/{birthday}/{birthday1}", method = RequestMethod.GET)
     public List<Employees> getEmployeesByBirthdayDateBetween(@PathVariable("birthday") Date birthday,
                                                              @PathVariable("birthday1") Date birthday1){
-        return restEmployeesService.getEmployeesByBirthdayDateBetween(birthday, birthday1);
+        return employeesService.getEmployeesByBirthdayDateBetween(birthday, birthday1);
     }
 
     /**
@@ -88,9 +88,9 @@ public class EmployeesController {
                            @PathVariable("department") String department, @PathVariable("birthday") Date birthday,
                            @PathVariable("salary") int salary){
         logger.info("Inserting new data in Employees table...");
-        restEmployeesService.insert(employeeName, department, birthday, salary);
+        employeesService.insert(employeeName, department, birthday, salary);
         logger.info(employeeName + department + birthday + salary + " insertNewDepartment successful");
-        return restEmployeesService.getAll();
+        return employeesService.getAll();
     }
 
     /**
@@ -104,9 +104,9 @@ public class EmployeesController {
     public List<Employees> updateEmployeeDataById(@PathVariable("id") Long id, @PathVariable("employeeName") String employeeName,
                                                   @PathVariable("department") String department, @PathVariable("birthday") Date birthday,
                                                   @PathVariable("salary") int salary){
-        restEmployeesService.update(id, employeeName, department, birthday, salary);
+        employeesService.update(id, employeeName, department, birthday, salary);
         logger.info(employeeName + " updated successful");
-        return restEmployeesService.getAll();
+        return employeesService.getAll();
     }
 
     /**
@@ -117,8 +117,8 @@ public class EmployeesController {
      */
     @RequestMapping(value = "/remove/employee/{id}", method = RequestMethod.POST)
     public List<Employees> deleteEmployeeById(@PathVariable("id") Long id){
-        restEmployeesService.delete(id);
+        employeesService.delete(id);
         logger.info(id + "deleted successful");
-        return restEmployeesService.getAll();
+        return employeesService.getAll();
     }
 }

@@ -22,7 +22,7 @@ public class EmployeesControllerTest {
 
     private EmbeddedDatabase ds;
     private JdbcTemplate template;
-    private EmployeesController employeesController;
+    private EmployeesController employeesController = new EmployeesController();
 
     @Before
     public void setUp() {
@@ -32,7 +32,6 @@ public class EmployeesControllerTest {
                 .addScript("db/insert-data.sql")
                 .build();
 
-        employeesController = new EmployeesController();
         RestEmployeesService employeesService = new RestEmployeesService();
         JdbcEmployeesDao employeesDao = new JdbcEmployeesDao();
         employeesDao.setDataSource(ds);

@@ -6,7 +6,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
- * Enable WebMVC for application.
+ * Configuration class. Enable MVC. Configure resource handler
+ * and view resolver for application.
  */
 @Configuration
 @EnableWebMvc

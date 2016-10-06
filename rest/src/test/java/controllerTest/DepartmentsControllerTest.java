@@ -27,7 +27,7 @@ public class DepartmentsControllerTest {
 
     private EmbeddedDatabase ds;
     private JdbcTemplate template;
-    private DepartmentsController departmentsController;
+    private DepartmentsController departmentsController = new DepartmentsController();
 
     @Before
     public void setUp(){
@@ -38,10 +38,9 @@ public class DepartmentsControllerTest {
                 .build();
 
         RestDepartmentsService departmentsService = new RestDepartmentsService();
-        departmentsController = new DepartmentsController();
         JdbcDepartmentsDao departmentDao = new JdbcDepartmentsDao();
-        template = new JdbcTemplate(ds);
         departmentDao.setDataSource(ds);
+        template = new JdbcTemplate(ds);
 
         ReflectionTestUtils.setField(departmentsService, "departmentDao", departmentDao);
         ReflectionTestUtils.setField(departmentsController, "departmentsService", departmentsService);

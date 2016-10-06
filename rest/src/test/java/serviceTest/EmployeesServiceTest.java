@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 public class EmployeesServiceTest {
 
     private EmbeddedDatabase ds;
-    private RestEmployeesService employeesService;
+    private RestEmployeesService employeesService = new RestEmployeesService();
     private JdbcTemplate template;
 
     @Before
@@ -31,7 +31,6 @@ public class EmployeesServiceTest {
                 .addScript("db/insert-data.sql")
                 .build();
 
-        employeesService = new RestEmployeesService();
         template = new JdbcTemplate(ds);
         JdbcEmployeesDao employeesDao = new JdbcEmployeesDao();
         employeesDao.setDataSource(ds);

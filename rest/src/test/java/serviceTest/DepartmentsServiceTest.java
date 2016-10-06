@@ -27,7 +27,7 @@ public class DepartmentsServiceTest {
 
     private EmbeddedDatabase ds;
     private JdbcTemplate template;
-    private RestDepartmentsService departmentsService;
+    private RestDepartmentsService departmentsService = new RestDepartmentsService();
 
     @Before
     public void setUp()throws ServletException {
@@ -37,7 +37,6 @@ public class DepartmentsServiceTest {
                 .addScript("db/insert-data.sql")
                 .build();
 
-        departmentsService = new RestDepartmentsService();
         template = new JdbcTemplate(ds);
         JdbcDepartmentsDao departmentDao = new JdbcDepartmentsDao();
         departmentDao.setDataSource(ds);

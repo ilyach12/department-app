@@ -1,101 +1,124 @@
 package serviceTest;
 
-import model.Employees;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.web.client.RestTemplate;
 import service.WebAppEmployeesService;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 public class EmployeesServiceTest {
 
-    private WebAppEmployeesService employeesService;
-    private List<Employees> list = new ArrayList<>();
+    private RestTemplate restTemplate = new RestTemplate();
+    private WebAppEmployeesService employeesService = new WebAppEmployeesService(restTemplate);
+    private MockRestServiceServer restServiceServer;
 
     @Before
     public void setUp(){
-        Employees employees = new Employees();
-        employees.setId(1L);
-        employees.setFullName("Semen Slepakov");
-        employees.setDepartment("Java");
-        employees.setBirthday(Date.valueOf("1987-08-11"));
-        employees.setSalary(1200);
-
-        Employees employees1 = new Employees();
-        employees1.setId(2L);
-        employees1.setFullName("Arkadiy Pospeliy");
-        employees1.setDepartment(".NET");
-        employees1.setBirthday(Date.valueOf("1991-01-01"));
-        employees1.setSalary(1100);
-
-        list.add(employees);
-        list.add(employees1);
+        restServiceServer = MockRestServiceServer.createServer(restTemplate);
     }
 
     @Test
     public void testGetAll(){
-        employeesService = mock(WebAppEmployeesService.class);
-        when(employeesService.getAll()).thenReturn(list);
-        assertEquals(2, employeesService.getAll().size());
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/employees"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(
+                        "[{\"id\":0,\"department\":\"null\",\"fullName\":\"null\"," +
+                                "\"birthday\":\"0000-00-00\",\"salary\":0}]",
+                        MediaType.APPLICATION_JSON));
+
+        employeesService.getAll();
+        restServiceServer.verify();
     }
 
     @Test
     public void testGetEmployeesByBirthdayDate(){
-        employeesService = new WebAppEmployeesService();
-        List<Employees> employees = employeesService.getEmployeesByBirthdayDate(Date.valueOf("1994-08-19"));
-        assertEquals(1, employees.size());
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/employees/birthday/1992-01-01"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(
+                        "[{\"id\":0,\"department\":\"null\",\"fullName\":\"null\"," +
+                                "\"birthday\":\"0000-00-00\",\"salary\":0}]",
+                        MediaType.APPLICATION_JSON));
+
+        employeesService.getEmployeesByBirthdayDate(Date.valueOf("1992-01-01"));
+        restServiceServer.verify();
     }
 
     @Test
     public void testGetEmployeesByBirthdayDateBetween(){
-        employeesService = new WebAppEmployeesService();
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/employees/birthday/between/1992-01-01/1993-01-01"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(
+                        "[{\"id\":0,\"department\":\"null\",\"fullName\":\"null\"," +
+                                "\"birthday\":\"0000-00-00\",\"salary\":0}]",
+                        MediaType.APPLICATION_JSON));
 
-        String birthday = "1987-01-01";
-        String birthday1 = "1992-01-01";
-        List<Employees> employees = employeesService.getEmployeesByBirthdayDateBetween(Date.valueOf(birthday),
-                Date.valueOf(birthday1));
-        assertEquals(5, employees.size());
+        employeesService.getEmployeesByBirthdayDateBetween(Date.valueOf("1992-01-01"), Date.valueOf("1993-01-01"));
+        restServiceServer.verify();
     }
 
     @Test
     public void testGetEmployeesByDepartmentName(){
-        employeesService = new WebAppEmployeesService();
-        List<Employees> employees = employeesService.getEmployeesByDepartmentName("dotNOT");
-        assertEquals(4, employees.size());
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/employees/department/QA"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(
+                        "[{\"id\":0,\"department\":\"null\",\"fullName\":\"null\"," +
+                                "\"birthday\":\"0000-00-00\",\"salary\":0}]",
+                        MediaType.APPLICATION_JSON));
+
+        employeesService.getEmployeesByDepartmentName("QA");
+        restServiceServer.verify();
     }
 
     @Test
     public void testInsert(){
-        employeesService = new WebAppEmployeesService();
-        employeesService.insert("Evkakiy", "dotNOT", Date.valueOf("1974-02-17"), 700);
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/employees/addNewEmployee/employeeName/" +
+                        "Jack/department/QA/birthday/1992-01-01/salary/1100"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withSuccess(
+                        "{\"id\" : \"0\"}",
+                        MediaType.APPLICATION_JSON));
 
-        List<Employees> employees = employeesService.getAll();
-        assertEquals(17, employees.size());
-        List<Employees> employeesBday = employeesService.getEmployeesByBirthdayDate(Date.valueOf("1974-02-17"));
-        assertEquals(1, employeesBday.size());
+        employeesService.insert("Jack", "QA", Date.valueOf("1992-01-01"), 1100);
+        restServiceServer.verify();
     }
 
     @Test
     public void testUpdate(){
-        employeesService = new WebAppEmployeesService();
-        employeesService.update(54L, "Artemiy", "Java", Date.valueOf("1920-01-01"), 800);
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/employees/updatingEmployeeData/employeeId/1" +
+                        "/employeeName/Jack/department/QA/birthday/1993-01-01/salary/1000"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withSuccess(
+                        "{\"id\" : \"0\"}",
+                        MediaType.APPLICATION_JSON));
 
-        List<Employees> employeesBday = employeesService.getEmployeesByBirthdayDate(Date.valueOf("1920-01-01"));
-        assertEquals(1, employeesBday.size());
+        employeesService.update(1L, "Jack", "QA", Date.valueOf("1993-01-01"), 1000);
+        restServiceServer.verify();
     }
 
     @Test
     public void testDelete(){
-        employeesService = new WebAppEmployeesService();
-        employeesService.delete(54L);
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/employees/remove/employee/1"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withSuccess(
+                        "{\"id\" : \"0\"}",
+                        MediaType.APPLICATION_JSON));
 
-        List<Employees> employees = employeesService.getAll();
-        assertEquals(16, employees.size());
+        employeesService.delete(1L);
+        restServiceServer.verify();
     }
 }
