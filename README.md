@@ -10,8 +10,8 @@ For download source code from git use:
 ```
 git clone https://github.com/ilyach12/department-app.git
 ```
-after this you need move into folder with source code and build war files. For that you just need to run build.bat. 
-Now you need launch this war files on Tomcat server and configure context path for client as "/", for server "/server". After that you can use client on next URL`s:
+after this you need move into folder with source code and build war files. For that you just need to run build.bat(Windows) or build.sh(Ubuntu). 
+Now you need launch this war files on Tomcat server and configure context path for client as "/", for server "/server". After that you can use application on next URL`s:
 
 ## For client:
 ### Departments

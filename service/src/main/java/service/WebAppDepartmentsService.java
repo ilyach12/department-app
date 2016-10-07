@@ -2,6 +2,8 @@ package service;
 
 import model.Department;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,13 +18,25 @@ import java.util.Map;
  * of data access.
  */
 @Service
+@PropertySource("classpath:uri.properties")
 public class WebAppDepartmentsService implements IDepartmentsService {
 
-    /**
-     * Rest service url for managing department data.
-     */
-    private final String HOST_URL = "http://localhost:8080/server/departments";
     private final RestTemplate restTemplate;
+    /**
+     * Rest service url for managing departments data.
+     */
+    @Value("${departmentsHost}")
+    private String hostUrl;
+    @Value("${departmentsByName}")
+    private String byNameUri;
+    @Value("${allDepartmentsWithEmployees}")
+    private String allWithEmployeesUri;
+    @Value("${insertDepartment}")
+    private String insertUri;
+    @Value("${updateDepartment}")
+    private String updateUri;
+    @Value("${deleteDepartment}")
+    private String deleteUri;
 
     @Autowired
     public WebAppDepartmentsService(RestTemplate restTemplate){
@@ -36,7 +50,7 @@ public class WebAppDepartmentsService implements IDepartmentsService {
      */
     @Override
     public List<Department> getAll(){
-        Department[] departments = restTemplate.getForObject(HOST_URL, Department[].class);
+        Department[] departments = restTemplate.getForObject(hostUrl, Department[].class);
         return Arrays.asList(departments);
     }
 
@@ -48,10 +62,9 @@ public class WebAppDepartmentsService implements IDepartmentsService {
      */
     @Override
     public List<Department> getDepartmentByNameWithEmployees(String departmentName){
-        String uri = "/{departmentName}";
         Map<String, String> map = new HashMap<>();
         map.put("departmentName", departmentName);
-        Department[] department = restTemplate.getForObject(HOST_URL + uri, Department[].class, map);
+        Department[] department = restTemplate.getForObject(hostUrl + byNameUri, Department[].class, map);
         return Arrays.asList(department);
     }
 
@@ -63,8 +76,7 @@ public class WebAppDepartmentsService implements IDepartmentsService {
      */
     @Override
     public List<Department> getAllDepartmentsWithEmployees(){
-        String uri = "/getAllDepartmentsWithEmployees";
-        Department[] departments = restTemplate.getForObject(HOST_URL + uri, Department[].class);
+        Department[] departments = restTemplate.getForObject(hostUrl + allWithEmployeesUri, Department[].class);
         return Arrays.asList(departments);
     }
 
@@ -75,10 +87,9 @@ public class WebAppDepartmentsService implements IDepartmentsService {
      */
     @Override
     public void insert(String departmentName){
-        String uri = "/insertNewRow/departmentName/{departmentName}";
         Map<String, String> map = new HashMap<>();
         map.put("departmentName", departmentName);
-        restTemplate.postForLocation(HOST_URL + uri, Department.class, map);
+        restTemplate.postForLocation(hostUrl + insertUri, Department.class, map);
     }
 
     /**
@@ -89,11 +100,10 @@ public class WebAppDepartmentsService implements IDepartmentsService {
      */
     @Override
     public void update(Long id, String departmentName){
-        String uri = "/rename/departmentWithId/{id}/newName/{departmentName}";
         Map<String, Object> map = new HashMap<>(2);
         map.put("id", id);
         map.put("departmentName", departmentName);
-        restTemplate.postForLocation(HOST_URL + uri, Department.class, map);
+        restTemplate.postForLocation(hostUrl + updateUri, Department.class, map);
     }
 
     /**
@@ -103,9 +113,8 @@ public class WebAppDepartmentsService implements IDepartmentsService {
      */
     @Override
     public void delete(String departmentName){
-        String uri = "/remove/department/{departmentName}";
         Map<String, String> map = new HashMap<>();
         map.put("departmentName", departmentName);
-        restTemplate.postForLocation(HOST_URL + uri, Department.class, map);
+        restTemplate.postForLocation(hostUrl + deleteUri, Department.class, map);
     }
 }

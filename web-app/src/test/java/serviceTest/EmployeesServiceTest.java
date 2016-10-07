@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 import service.WebAppEmployeesService;
@@ -23,6 +24,16 @@ public class EmployeesServiceTest {
     @Before
     public void setUp(){
         restServiceServer = MockRestServiceServer.createServer(restTemplate);
+
+        ReflectionTestUtils.setField(employeesService, "hostUrl", "http://localhost:8080/server/employees");
+        ReflectionTestUtils.setField(employeesService, "byBdayUri", "/birthday/{birthday}");
+        ReflectionTestUtils.setField(employeesService, "byDbayBetween", "/birthday/between/{birthday}/{birthday1}");
+        ReflectionTestUtils.setField(employeesService, "byDepartmentName", "/department/{department}");
+        ReflectionTestUtils.setField(employeesService, "insert",
+                "/addNewEmployee/employeeName/{fullName}/department/{department}/birthday/{birthday}/salary/{salary}");
+        ReflectionTestUtils.setField(employeesService, "update",
+                "/updatingEmployeeData/employeeId/{id}/employeeName/{fullName}/department/{department}/birthday/{birthday}/salary/{salary}");
+        ReflectionTestUtils.setField(employeesService, "delete", "/remove/employee/{id}");
     }
 
     @Test

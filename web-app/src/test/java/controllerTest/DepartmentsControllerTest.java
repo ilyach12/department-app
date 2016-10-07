@@ -26,6 +26,14 @@ public class DepartmentsControllerTest {
     @Before
     public void setUp(){
         restServiceServer = MockRestServiceServer.createServer(restTemplate);
+
+        ReflectionTestUtils.setField(departmentsService, "hostUrl", "http://localhost:8080/server/departments");
+        ReflectionTestUtils.setField(departmentsService, "byNameUri", "/{departmentName}");
+        ReflectionTestUtils.setField(departmentsService, "allWithEmployeesUri", "/getAllDepartmentsWithEmployees");
+        ReflectionTestUtils.setField(departmentsService, "insertUri", "/insertNewRow/departmentName/{departmentName}");
+        ReflectionTestUtils.setField(departmentsService, "updateUri",
+                "/rename/departmentWithId/{id}/newName/{departmentName}");
+        ReflectionTestUtils.setField(departmentsService, "deleteUri", "/remove/department/{departmentName}");
     }
 
     @Test
@@ -78,7 +86,7 @@ public class DepartmentsControllerTest {
         ReflectionTestUtils.setField(departmentsController, "departmentsService", departmentsService);
         restServiceServer
                 .expect(requestTo("http://localhost:8080/server/departments/insertNewRow/departmentName/Test"))
-                .andExpect(method(HttpMethod.POST))
+                .andExpect(method(HttpMethod.GET))
                 .andRespond(withSuccess(
                         "{\"id\" : \"0,\"}",
                         MediaType.APPLICATION_JSON));

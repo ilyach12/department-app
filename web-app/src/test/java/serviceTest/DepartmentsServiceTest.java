@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 import service.WebAppDepartmentsService;
@@ -21,6 +22,14 @@ public class DepartmentsServiceTest {
     @Before
     public void setUp(){
         restServiceServer = MockRestServiceServer.createServer(restTemplate);
+
+        ReflectionTestUtils.setField(departmentsService, "hostUrl", "http://localhost:8080/server/departments");
+        ReflectionTestUtils.setField(departmentsService, "byNameUri", "/{departmentName}");
+        ReflectionTestUtils.setField(departmentsService, "allWithEmployeesUri", "/getAllDepartmentsWithEmployees");
+        ReflectionTestUtils.setField(departmentsService, "insertUri", "/insertNewRow/departmentName/{departmentName}");
+        ReflectionTestUtils.setField(departmentsService, "updateUri",
+                "/rename/departmentWithId/{id}/newName/{departmentName}");
+        ReflectionTestUtils.setField(departmentsService, "deleteUri", "/remove/department/{departmentName}");
     }
 
     @Test

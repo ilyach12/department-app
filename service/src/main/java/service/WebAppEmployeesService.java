@@ -2,6 +2,8 @@ package service;
 
 import model.Employees;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,13 +19,27 @@ import java.util.Map;
  * of data access.
  */
 @Service
+@PropertySource("classpath:uri.properties")
 public class WebAppEmployeesService implements IEmployeesService {
 
-    /**
-     * Default url by REST service for getting data about employees.
-     */
-    private final String HOST_URL = "http://localhost:8080/server/employees";
     private final RestTemplate restTemplate;
+    /**
+     * Rest service url for managing employees data.
+     */
+    @Value("${employeesHost}")
+    private String hostUrl;
+    @Value("${employeesByBday}")
+    private String byBdayUri;
+    @Value("${employeesByBdayBetween}")
+    private String byDbayBetween;
+    @Value("${employeesByDeaprtmentName}")
+    private String byDepartmentName;
+    @Value("${insertEmployee}")
+    private String insert;
+    @Value("${updateEmployee}")
+    private String update;
+    @Value("${deleteEmployee}")
+    private String delete;
 
     @Autowired
     public WebAppEmployeesService(RestTemplate restTemplate){
@@ -37,7 +53,7 @@ public class WebAppEmployeesService implements IEmployeesService {
      */
     @Override
     public List<Employees> getAll(){
-        Employees[] employees = restTemplate.getForObject(HOST_URL, Employees[].class);
+        Employees[] employees = restTemplate.getForObject(hostUrl, Employees[].class);
         return Arrays.asList(employees);
     }
 
@@ -50,11 +66,10 @@ public class WebAppEmployeesService implements IEmployeesService {
      */
     @Override
     public List<Employees> getEmployeesByBirthdayDate(Date birthday) {
-        String uri = "/birthday/{birthday}";
         Map<String, Date> map = new HashMap<>();
         map.put("birthday", birthday);
 
-        Employees[] employees = restTemplate.getForObject(HOST_URL + uri, Employees[].class, map);
+        Employees[] employees = restTemplate.getForObject(hostUrl + byBdayUri, Employees[].class, map);
         return Arrays.asList(employees);
     }
 
@@ -68,12 +83,11 @@ public class WebAppEmployeesService implements IEmployeesService {
      */
     @Override
     public List<Employees> getEmployeesByBirthdayDateBetween(Date birthday, Date birthday1) {
-        String uri = "/birthday/between/{birthday}/{birthday1}";
         Map<String, Date> map = new HashMap<>(2);
         map.put("birthday", birthday);
         map.put("birthday1", birthday1);
 
-        Employees[] employees = restTemplate.getForObject(HOST_URL + uri, Employees[].class, map);
+        Employees[] employees = restTemplate.getForObject(hostUrl + byDbayBetween, Employees[].class, map);
         return Arrays.asList(employees);
     }
 
@@ -85,11 +99,10 @@ public class WebAppEmployeesService implements IEmployeesService {
      */
     @Override
     public List<Employees> getEmployeesByDepartmentName(String departmentName) {
-        String uri = "/department/{department}";
         Map<String, String> map = new HashMap<>();
         map.put("department", departmentName);
 
-        Employees[] employees = restTemplate.getForObject(HOST_URL + uri, Employees[].class, map);
+        Employees[] employees = restTemplate.getForObject(hostUrl + byDepartmentName, Employees[].class, map);
         return Arrays.asList(employees);
     }
 
@@ -98,14 +111,12 @@ public class WebAppEmployeesService implements IEmployeesService {
      */
     @Override
     public void insert(String fullName, String department, Date birthday, int salary) {
-        String uri = "/addNewEmployee/employeeName/{fullName}/department/{department}/" +
-                "birthday/{birthday}/salary/{salary}";
         Map<String, Object> map = new HashMap<>(4);
         map.put("fullName", fullName);
         map.put("department", department);
         map.put("birthday", birthday);
         map.put("salary", salary);
-        restTemplate.postForLocation(HOST_URL + uri, Employees.class, map);
+        restTemplate.postForLocation(hostUrl + insert, Employees.class, map);
     }
 
     /**
@@ -113,15 +124,13 @@ public class WebAppEmployeesService implements IEmployeesService {
      */
     @Override
     public void update(Long id, String fullName, String department, Date birthday, int salary) {
-        String uri = "/updatingEmployeeData/employeeId/{id}/employeeName/{fullName}/" +
-                "department/{department}/birthday/{birthday}/salary/{salary}";
         Map<String, Object> map = new HashMap<>(5);
         map.put("id", id);
         map.put("fullName", fullName);
         map.put("department", department);
         map.put("birthday", birthday);
         map.put("salary", salary);
-        restTemplate.postForLocation(HOST_URL + uri, Employees.class, map);
+        restTemplate.postForLocation(hostUrl + update, Employees.class, map);
     }
 
     /**
@@ -131,10 +140,9 @@ public class WebAppEmployeesService implements IEmployeesService {
      */
     @Override
     public void delete(Long id) {
-        String uri = "/remove/employee/{id}";
         Map<String, Long> map = new HashMap<>();
         map.put("id", id);
-        restTemplate.postForLocation(HOST_URL + uri, Employees.class, map);
+        restTemplate.postForLocation(hostUrl + delete, Employees.class, map);
     }
 
 }
