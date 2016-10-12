@@ -35,8 +35,6 @@ public class JdbcEmployeesDao implements IEmployeesDao {
     private String findByBirthdayDate;
     @Value("${query.findByBirthdayDateBetween}")
     private String findByBirthdayDateBetween;
-    @Value("${query.findEmployeesByDepartmentName}")
-    private String findEmployeesByDepartmentName;
     @Value("${query.insertNewEmployee}")
     private String insertNewEmployee;
     @Value("${query.updateEmployee}")
@@ -59,10 +57,10 @@ public class JdbcEmployeesDao implements IEmployeesDao {
         jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    private Employees setEmployees(ResultSet rs, int rowNum) throws SQLException {
+    private Employees setEmployeeFields(ResultSet rs, int rowNum) throws SQLException {
         Employees employees = new Employees();
         employees.setId(rs.getLong("id"));
-        employees.setDepartment(rs.getString("department"));
+        employees.setDepartmentName(rs.getString("departmentName"));
         employees.setFullName(rs.getString("fullName"));
         employees.setBirthday(rs.getDate("birthday"));
         employees.setSalary(rs.getInt("salary"));
@@ -71,7 +69,7 @@ public class JdbcEmployeesDao implements IEmployeesDao {
 
     @Override
     public List<Employees> findAll() {
-        return jdbcTemplate.query(findAllEmployees, this::setEmployees);
+        return jdbcTemplate.query(findAllEmployees, this::setEmployeeFields);
     }
 
     /**
@@ -85,7 +83,7 @@ public class JdbcEmployeesDao implements IEmployeesDao {
     public List<Employees> findByBirthdayDate(Date birthday) {
         Map<String, Date> map = new HashMap<>();
         map.put("birthday", birthday);
-        return jdbcTemplate.query(findByBirthdayDate, map, this::setEmployees);
+        return jdbcTemplate.query(findByBirthdayDate, map, this::setEmployeeFields);
     }
 
 
@@ -99,23 +97,10 @@ public class JdbcEmployeesDao implements IEmployeesDao {
      */
     @Override
     public List<Employees> findByBirthdayBetween(Date birthday, Date birthday1) {
-        Map<String, Date> map = new HashMap<>();
+        Map<String, Date> map = new HashMap<>(2);
         map.put("birthday", birthday);
         map.put("birthday1", birthday1);
-        return jdbcTemplate.query(findByBirthdayDateBetween, map, this::setEmployees);
-    }
-
-    /**
-     * This method searching employees from a certain department.
-     *
-     * @param departmentName takes a String with department name
-     * @return List of all found employees
-     */
-    @Override
-    public List<Employees> findByDepartmentName(String departmentName) {
-        Map<String, String> map = new HashMap<>();
-        map.put("department", departmentName);
-        return jdbcTemplate.query(findEmployeesByDepartmentName, map, this::setEmployees);
+        return jdbcTemplate.query(findByBirthdayDateBetween, map, this::setEmployeeFields);
     }
 
     /**
@@ -123,16 +108,15 @@ public class JdbcEmployeesDao implements IEmployeesDao {
      * for new employee.
      *
      * @param employeeName new employee name
-     * @param department department where will working new employee
+     * @param department_id id of department where will working new employee
      * @param birthday birthday date of new employee
      * @param salary employee salary
      */
     @Override
-    public void insertNewEmployee(String employeeName, String department,
-                                  Date birthday, int salary) {
-        Map<String, Object> map = new HashMap<>(5);
+    public void insertNewEmployee(String employeeName, Long department_id, Date birthday, int salary) {
+        Map<String, Object> map = new HashMap<>(4);
         map.put("fullName", employeeName);
-        map.put("department", department);
+        map.put("department_id", department_id);
         map.put("birthday", birthday);
         map.put("salary", salary);
         jdbcTemplate.update(insertNewEmployee, map);
@@ -143,17 +127,16 @@ public class JdbcEmployeesDao implements IEmployeesDao {
      *
      * @param id id of editable employee
      * @param employeeName new employee name
-     * @param department new department name
+     * @param department_id new department ID
      * @param birthday new birthday date
      * @param salary new salary for this employee
      */
     @Override
-    public void updateById(Long id, String employeeName, String department,
-                           Date birthday, int salary) {
+    public void updateById(Long id, String employeeName, Long department_id, Date birthday, int salary) {
         Map<String, Object> map = new HashMap<>(5);
         map.put("id", id);
         map.put("fullName", employeeName);
-        map.put("department", department);
+        map.put("department_id", department_id);
         map.put("birthday", birthday);
         map.put("salary", salary);
         jdbcTemplate.update(updateEmployee, map);

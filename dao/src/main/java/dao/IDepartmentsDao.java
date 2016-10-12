@@ -10,7 +10,6 @@ public interface IDepartmentsDao {
     void setDataSource(DataSource dataSource);
     List<Department> findAll();
     List<Department> findAllWithEmployees();
-    List<Department> findDepartmentByNameWithEmployees(String departmentName);
     void insertNewDepartment(String departmentName);
     void updateById(Long id, String departmentName);
     void deleteByName(String departmentName);

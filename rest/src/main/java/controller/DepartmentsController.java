@@ -51,24 +51,12 @@ public class DepartmentsController {
     }
 
     /**
-     * This method finds one department with all employees from this
-     * department.
-     *
-     * @param departmentName name of searching department
-     * @return List which contains one department and list of all employees from this department
-     */
-    @RequestMapping(value = "/{departmentName}", method = RequestMethod.GET)
-    public List<Department> getDepartmentByNameWithEmployees(@PathVariable("departmentName") String departmentName){
-        return departmentsService.getDepartmentByNameWithEmployees(departmentName);
-    }
-
-    /**
      * Add new department on database. Id generate automatically.
      *
      * @param departmentName name of new department
      * @return List of all departments in Json format
      */
-    @RequestMapping(value = "/insertNewRow/departmentName/{departmentName}", method = RequestMethod.POST)
+    @RequestMapping(value = "/addNewDepartment/departmentName/{departmentName}", method = RequestMethod.POST)
     public List<Department> insertNewDepartment(@PathVariable("departmentName")
                                                                            String departmentName) {
         logger.info("Creating department: " + departmentName);
@@ -84,7 +72,7 @@ public class DepartmentsController {
      * @param departmentName new name for this department
      * @return List of all departments in Json format
      */
-    @RequestMapping(value = "/rename/departmentWithId/{id}/newName/{departmentName}",
+    @RequestMapping(value = "/update/departmentId/{id}/newName/{departmentName}",
             method = RequestMethod.POST)
     public List<Department> updateDepartmentNameById(@PathVariable("id") Long id,
                                                      @PathVariable("departmentName") String departmentName){

@@ -41,7 +41,7 @@ public class EmployeesController {
     }
 
     /**
-     * {@code getEmployeesByBirthdayDate} Getting all employees who has b-day date
+     * {@code getEmployeesByBirthdayDate()} Getting all employees who has b-day date
      * like date taking as parameter.
      *
      * @param birthday date of b-day employee
@@ -50,18 +50,6 @@ public class EmployeesController {
     @RequestMapping(value = "/birthday/{birthday}", method = RequestMethod.GET)
     public List<Employees> getEmployeesByBirthdayDate(@PathVariable("birthday") Date birthday){
         return employeesService.getEmployeesByBirthdayDate(birthday);
-    }
-
-    /**
-     * Getting employees who works on department the name specified
-     * on parameter.
-     *
-     * @param department name of searching department
-     * @return List of all employees on this department in Json format
-     */
-    @RequestMapping(value = "/department/{department}", method = RequestMethod.GET)
-    public List<Employees> getEmployeesByDepartmentName(@PathVariable("department") String department){
-        return employeesService.getEmployeesByDepartmentName(department);
     }
 
     /**
@@ -82,14 +70,14 @@ public class EmployeesController {
      *
      * @return List of all employees in Json format
      */
-    @RequestMapping(value = "/addNewEmployee/employeeName/{employeeName}/department/{department}/" +
+    @RequestMapping(value = "/addNewEmployee/employeeName/{employeeName}/departmentId/{department_id}/" +
             "birthday/{birthday}/salary/{salary}", method = RequestMethod.POST)
     public List<Employees> insertNewEmployee(@PathVariable("employeeName") String employeeName,
-                           @PathVariable("department") String department, @PathVariable("birthday") Date birthday,
+                           @PathVariable("department_id") Long department_id, @PathVariable("birthday") Date birthday,
                            @PathVariable("salary") int salary){
         logger.info("Inserting new data in Employees table...");
-        employeesService.insert(employeeName, department, birthday, salary);
-        logger.info(employeeName + department + birthday + salary + " insertNewDepartment successful");
+        employeesService.insert(employeeName, department_id, birthday, salary);
+        logger.info(employeeName + department_id + birthday + salary + " insertNewDepartment successful");
         return employeesService.getAll();
     }
 
@@ -98,19 +86,20 @@ public class EmployeesController {
      *
      * @return List of all employees in Json format
      */
-    @RequestMapping(value = "/updatingEmployeeData/employeeId/{id}/employeeName/{employeeName}/" +
-            "department/{department}/birthday/{birthday}/salary/{salary}",
-    method = RequestMethod.POST)
-    public List<Employees> updateEmployeeDataById(@PathVariable("id") Long id, @PathVariable("employeeName") String employeeName,
-                                                  @PathVariable("department") String department, @PathVariable("birthday") Date birthday,
+    @RequestMapping(value = "/updateEmployeeData/employeeId/{id}/employeeName/{employeeName}/" +
+            "departmentId/{department_id}/birthday/{birthday}/salary/{salary}", method = RequestMethod.POST)
+    public List<Employees> updateEmployeeDataById(@PathVariable("id") Long id,
+                                                  @PathVariable("employeeName") String employeeName,
+                                                  @PathVariable("department_id") Long department_id,
+                                                  @PathVariable("birthday") Date birthday,
                                                   @PathVariable("salary") int salary){
-        employeesService.update(id, employeeName, department, birthday, salary);
+        employeesService.update(id, employeeName, department_id, birthday, salary);
         logger.info(employeeName + " updated successful");
         return employeesService.getAll();
     }
 
     /**
-     * Delete employee by name from database.
+     * Remove employee by name from database.
      *
      * @param id id of employee who must be deleted
      * @return List of all employees in Json format
@@ -118,7 +107,7 @@ public class EmployeesController {
     @RequestMapping(value = "/remove/employee/{id}", method = RequestMethod.POST)
     public List<Employees> deleteEmployeeById(@PathVariable("id") Long id){
         employeesService.delete(id);
-        logger.info(id + "deleted successful");
+        logger.info("employee with " + id + " deleted successful");
         return employeesService.getAll();
     }
 }

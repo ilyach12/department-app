@@ -31,15 +31,13 @@ public class WebAppEmployeesService implements IEmployeesService {
     @Value("${employeesByBday}")
     private String byBdayUri;
     @Value("${employeesByBdayBetween}")
-    private String byDbayBetween;
-    @Value("${employeesByDeaprtmentName}")
-    private String byDepartmentName;
+    private String byBdayBetweenUri;
     @Value("${insertEmployee}")
-    private String insert;
+    private String insertUri;
     @Value("${updateEmployee}")
-    private String update;
+    private String updateUri;
     @Value("${deleteEmployee}")
-    private String delete;
+    private String deleteUri;
 
     @Autowired
     public WebAppEmployeesService(RestTemplate restTemplate){
@@ -47,7 +45,7 @@ public class WebAppEmployeesService implements IEmployeesService {
     }
 
     /**
-     * {@code getAll} method getting all employees from REST.
+     * {@code getAll()} method getting all employees from REST.
      *
      * @return List of all employees
      */
@@ -61,7 +59,7 @@ public class WebAppEmployeesService implements IEmployeesService {
      * Find all employees who has a certain by taking parameter
      * date of b-day.
      *
-     * @param birthday takes date f birthday
+     * @param birthday takes date of birthday
      * @return List of all found employees with this b-day date
      */
     @Override
@@ -87,54 +85,39 @@ public class WebAppEmployeesService implements IEmployeesService {
         map.put("birthday", birthday);
         map.put("birthday1", birthday1);
 
-        Employees[] employees = restTemplate.getForObject(hostUrl + byDbayBetween, Employees[].class, map);
+        Employees[] employees = restTemplate.getForObject(hostUrl + byBdayBetweenUri, Employees[].class, map);
         return Arrays.asList(employees);
     }
 
     /**
-     * Getting all employees by department where employees work.
-     *
-     * @param departmentName name of searching department
-     * @return List of employees who works in founded department
+     * {@code insert()} inserting new employee in data table.
      */
     @Override
-    public List<Employees> getEmployeesByDepartmentName(String departmentName) {
-        Map<String, String> map = new HashMap<>();
-        map.put("department", departmentName);
-
-        Employees[] employees = restTemplate.getForObject(hostUrl + byDepartmentName, Employees[].class, map);
-        return Arrays.asList(employees);
-    }
-
-    /**
-     * {@code insert} inserting new employee in data table.
-     */
-    @Override
-    public void insert(String fullName, String department, Date birthday, int salary) {
+    public void insert(String fullName, Long department_id, Date birthday, int salary) {
         Map<String, Object> map = new HashMap<>(4);
         map.put("fullName", fullName);
-        map.put("department", department);
+        map.put("department_id", department_id);
         map.put("birthday", birthday);
         map.put("salary", salary);
-        restTemplate.postForLocation(hostUrl + insert, Employees.class, map);
+        restTemplate.postForLocation(hostUrl + insertUri, Employees.class, map);
     }
 
     /**
      * Update employee data in table by ID of this employee.
      */
     @Override
-    public void update(Long id, String fullName, String department, Date birthday, int salary) {
+    public void update(Long id, String fullName, Long department_id, Date birthday, int salary) {
         Map<String, Object> map = new HashMap<>(5);
         map.put("id", id);
         map.put("fullName", fullName);
-        map.put("department", department);
+        map.put("department_id", department_id);
         map.put("birthday", birthday);
         map.put("salary", salary);
-        restTemplate.postForLocation(hostUrl + update, Employees.class, map);
+        restTemplate.postForLocation(hostUrl + updateUri, Employees.class, map);
     }
 
     /**
-     * Delete employee from database by name of this employee.
+     * Delete employee from database by employee id.
      *
      * @param id of employee who must be deleted
      */
@@ -142,7 +125,7 @@ public class WebAppEmployeesService implements IEmployeesService {
     public void delete(Long id) {
         Map<String, Long> map = new HashMap<>();
         map.put("id", id);
-        restTemplate.postForLocation(hostUrl + delete, Employees.class, map);
+        restTemplate.postForLocation(hostUrl + deleteUri, Employees.class, map);
     }
 
 }

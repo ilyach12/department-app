@@ -13,17 +13,6 @@
 <body>
 <div class="container">
     <div class="row card">
-        <div class="col s4">
-            <h5>Search by department name: </h5>
-        </div>
-        <div class="col s4">
-            <form action="/departments/searchByName" method="get">
-                <input placeholder="department name" name="departmentName" type="search" required>
-                <button class="btn waves-effect waves-light" type="submit">Search</button>
-            </form>
-        </div>
-    </div>
-    <div class="row card">
         <div class="col s12">
             <table class="striped">
                 <thead>
@@ -41,7 +30,7 @@
                         <th>${item.departmentName}</th>
                         <th style="line-height: 1.5">
                         <c:forEach items="${item.employeesInThisDepartment}" var="empl">
-                            name: ${empl.fullName}, department: ${empl.department},
+                            name: ${empl.fullName}, department: ${empl.departmentName},
                             salary: ${empl.salary}$, birthday: ${empl.birthday};<br>
                         </c:forEach>
                     </tr>

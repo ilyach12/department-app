@@ -32,23 +32,18 @@ public class RestEmployeesService implements IEmployeesService {
     }
 
     @Override
-    public List<Employees> getEmployeesByDepartmentName(String departmentName) {
-        return jdbcEmployeesDao.findByDepartmentName(departmentName);
-    }
-
-    @Override
     public List<Employees> getEmployeesByBirthdayDateBetween(Date birthday, Date birthday1) {
         return jdbcEmployeesDao.findByBirthdayBetween(birthday, birthday1);
     }
 
     @Override
-    public void insert(String employeeName, String department, Date birthday, int salary) {
-        jdbcEmployeesDao.insertNewEmployee(employeeName, department, birthday, salary);
+    public void insert(String employeeName, Long department_id, Date birthday, int salary) {
+        jdbcEmployeesDao.insertNewEmployee(employeeName, department_id, birthday, salary);
     }
 
     @Override
-    public void update(Long id, String employeeName, String department, Date birthday, int salary) {
-        jdbcEmployeesDao.updateById(id, employeeName, department, birthday, salary);
+    public void update(Long id, String employeeName, Long department_id, Date birthday, int salary) {
+        jdbcEmployeesDao.updateById(id, employeeName, department_id, birthday, salary);
     }
 
     @Override

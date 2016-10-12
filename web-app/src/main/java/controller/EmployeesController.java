@@ -24,7 +24,7 @@ public class EmployeesController {
     private WebAppEmployeesService employeesService;
 
     /**
-     * This method get list of all employees.
+     * This method getting list of all employees.
      *
      * @return employees.jsp with list of all employees
      */
@@ -36,7 +36,7 @@ public class EmployeesController {
     }
 
     /**
-     * {@code getEmployeesByBirthdayDate} finds employees who has b-day date
+     * {@code getEmployeesByBirthdayDate()} finds employees who has b-day date
      * equal date takes as parameter.
      *
      * @param birthday b-day date
@@ -66,30 +66,15 @@ public class EmployeesController {
     }
 
     /**
-     * {@code getEmployeesByDepartmentName} found all employees from department
-     * whose name passed into parameters.
-     *
-     * @param department searching department name
-     * @return employees.jsp with list of all founded employees
-     */
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ModelAndView getEmployeesByDepartmentName(@RequestParam("department") String department){
-        ModelAndView mav = new ModelAndView("employees");
-        mav.addObject("employeesList", employeesService.getEmployeesByDepartmentName(department));
-        return mav;
-    }
-
-    /**
      * Inset new employee from database.
      *
      * @return employees.jsp with list of all employees
      */
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     public ModelAndView insertNewEmployee(@RequestParam("fullName") String fullName,
-                                          @RequestParam("department") String department,
-                                          @RequestParam("birthday") Date birthday,
-                                          @RequestParam("salary") int salary){
-        employeesService.insert(fullName, department, birthday, salary);
+                                          @RequestParam("department_id") Long department_id,
+                                          @RequestParam("birthday") Date birthday, @RequestParam("salary") int salary){
+        employeesService.insert(fullName, department_id, birthday, salary);
         return getAll();
     }
 
@@ -100,15 +85,14 @@ public class EmployeesController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ModelAndView updateEmployeeById(@RequestParam("id") Long id, @RequestParam("fullName") String employeeName,
-                                           @RequestParam("department") String department,
-                                           @RequestParam("birthday") Date birthday,
-                                           @RequestParam("salary") int salary){
-        employeesService.update(id, employeeName, department, birthday, salary);
+                                           @RequestParam("department_id") Long department_id,
+                                           @RequestParam("birthday") Date birthday, @RequestParam("salary") int salary){
+        employeesService.update(id, employeeName, department_id, birthday, salary);
         return getAll();
     }
 
     /**
-     * Delete employee from database by name.
+     * Delete employee from database by id.
      * @param id of employee who must be deleted
      * @return employees.jsp with list of all employees
      */

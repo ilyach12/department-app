@@ -8,12 +8,9 @@ import java.util.List;
 public interface IEmployeesService {
 
     List<Employees> getAll();
-    List<Employees> getEmployeesByDepartmentName(String departmentName);
     List<Employees> getEmployeesByBirthdayDate(Date birthday);
     List<Employees> getEmployeesByBirthdayDateBetween(Date birthday, Date birthday1);
-    void insert(String employeeName, String department,
-                Date birthday, int salary);
-    void update(Long id, String employeeName, String department,
-                Date birthday, int salary);
+    void insert(String employeeName, Long department_id, Date birthday, int salary);
+    void update(Long id, String employeeName, Long department_id, Date birthday, int salary);
     void delete(Long id);
 }

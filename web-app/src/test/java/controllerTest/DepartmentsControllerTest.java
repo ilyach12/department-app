@@ -26,19 +26,18 @@ public class DepartmentsControllerTest {
     @Before
     public void setUp(){
         restServiceServer = MockRestServiceServer.createServer(restTemplate);
+        ReflectionTestUtils.setField(departmentsController, "departmentsService", departmentsService);
 
         ReflectionTestUtils.setField(departmentsService, "hostUrl", "http://localhost:8080/server/departments");
-        ReflectionTestUtils.setField(departmentsService, "byNameUri", "/{departmentName}");
         ReflectionTestUtils.setField(departmentsService, "allWithEmployeesUri", "/getAllDepartmentsWithEmployees");
-        ReflectionTestUtils.setField(departmentsService, "insertUri", "/insertNewRow/departmentName/{departmentName}");
+        ReflectionTestUtils.setField(departmentsService, "insertUri", "/addNewDepartment/departmentName/{departmentName}");
         ReflectionTestUtils.setField(departmentsService, "updateUri",
-                "/rename/departmentWithId/{id}/newName/{departmentName}");
+                "/update/departmentWithId/{id}/newName/{departmentName}");
         ReflectionTestUtils.setField(departmentsService, "deleteUri", "/remove/department/{departmentName}");
     }
 
     @Test
     public void testGetAll(){
-        ReflectionTestUtils.setField(departmentsController, "departmentsService", departmentsService);
         restServiceServer
                 .expect(requestTo("http://localhost:8080/server/departments"))
                 .andExpect(method(HttpMethod.GET))
@@ -52,23 +51,7 @@ public class DepartmentsControllerTest {
     }
 
     @Test
-    public void testGetDepartmentByName(){
-        ReflectionTestUtils.setField(departmentsController, "departmentsService", departmentsService);
-        restServiceServer
-                .expect(requestTo("http://localhost:8080/server/departments/QA"))
-                .andExpect(method(HttpMethod.GET))
-                .andRespond(withSuccess(
-                        "[{\"id\":0,\"departmentName\":\"null\",\"employeesInThisDepartment\":null,\"averageSalary\":0}]",
-                        MediaType.APPLICATION_JSON));
-
-        ModelAndView mav = departmentsController.getDepartmentByName("QA");
-        restServiceServer.verify();
-        assertEquals("departmentsWithEmployees", mav.getViewName());
-    }
-
-    @Test
     public void testGetAllDepartmentsWithEmployees(){
-        ReflectionTestUtils.setField(departmentsController, "departmentsService", departmentsService);
         restServiceServer
                 .expect(requestTo("http://localhost:8080/server/departments/getAllDepartmentsWithEmployees"))
                 .andExpect(method(HttpMethod.GET))
@@ -83,12 +66,11 @@ public class DepartmentsControllerTest {
 
     /*@Test
     public void testInsert(){
-        ReflectionTestUtils.setField(departmentsController, "departmentsService", departmentsService);
         restServiceServer
                 .expect(requestTo("http://localhost:8080/server/departments/insertNewRow/departmentName/Test"))
-                .andExpect(method(HttpMethod.GET))
+                .andExpect(method(HttpMethod.POST))
                 .andRespond(withSuccess(
-                        "{\"id\" : \"0,\"}",
+                        "{\"id\" : \"0\"}",
                         MediaType.APPLICATION_JSON));
 
         ModelAndView mav = departmentsController.insertNewDepartment("Test");
@@ -98,12 +80,11 @@ public class DepartmentsControllerTest {
 
     @Test
     public void testUpdate(){
-        ReflectionTestUtils.setField(departmentsController, "departmentsService", departmentsService);
         restServiceServer
                 .expect(requestTo("http://localhost:8080/server/departments/rename/departmentWithId/1/newName/Dep"))
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withSuccess(
-                        "{\"id\" : \"0,\"}",
+                        "{\"id\" : \"0\"}",
                         MediaType.APPLICATION_JSON));
 
         ModelAndView mav = departmentsController.updateDepartmentById(1L, "Dep");
@@ -113,7 +94,6 @@ public class DepartmentsControllerTest {
 
     @Test
     public void testDelete(){
-        ReflectionTestUtils.setField(departmentsController, "departmentsService", departmentsService);
         restServiceServer
                 .expect(requestTo("http://localhost:8080/server/departments/remove/department/QA"))
                 .andExpect(method(HttpMethod.POST))

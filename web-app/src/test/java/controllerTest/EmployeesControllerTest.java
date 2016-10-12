@@ -28,21 +28,20 @@ public class EmployeesControllerTest {
     @Before
     public void setUp(){
         restServiceServer = MockRestServiceServer.createServer(restTemplate);
+        ReflectionTestUtils.setField(employeesController, "employeesService", employeesService);
 
         ReflectionTestUtils.setField(employeesService, "hostUrl", "http://localhost:8080/server/employees");
         ReflectionTestUtils.setField(employeesService, "byBdayUri", "/birthday/{birthday}");
-        ReflectionTestUtils.setField(employeesService, "byDbayBetween", "/birthday/between/{birthday}/{birthday1}");
-        ReflectionTestUtils.setField(employeesService, "byDepartmentName", "/department/{department}");
-        ReflectionTestUtils.setField(employeesService, "insert",
+        ReflectionTestUtils.setField(employeesService, "byBdayBetweenUri", "/birthday/between/{birthday}/{birthday1}");
+        ReflectionTestUtils.setField(employeesService, "insertUri",
                 "/addNewEmployee/employeeName/{fullName}/department/{department}/birthday/{birthday}/salary/{salary}");
-        ReflectionTestUtils.setField(employeesService, "update",
+        ReflectionTestUtils.setField(employeesService, "updateUri",
                 "/updatingEmployeeData/employeeId/{id}/employeeName/{fullName}/department/{department}/birthday/{birthday}/salary/{salary}");
-        ReflectionTestUtils.setField(employeesService, "delete", "/remove/employee/{id}");
+        ReflectionTestUtils.setField(employeesService, "deleteUri", "/remove/employee/{id}");
     }
 
     @Test
     public void testGetAll(){
-        ReflectionTestUtils.setField(employeesController, "employeesService", employeesService);
         restServiceServer
                 .expect(requestTo("http://localhost:8080/server/employees"))
                 .andExpect(method(HttpMethod.GET))
@@ -58,7 +57,6 @@ public class EmployeesControllerTest {
 
     @Test
     public void testGetEmployeesByBirthdayDate(){
-        ReflectionTestUtils.setField(employeesController, "employeesService", employeesService);
         restServiceServer
                 .expect(requestTo("http://localhost:8080/server/employees/birthday/1992-01-01"))
                 .andExpect(method(HttpMethod.GET))
@@ -75,7 +73,6 @@ public class EmployeesControllerTest {
 
     @Test
     public void testGetEmployeesByBirthdayDateBetween(){
-        ReflectionTestUtils.setField(employeesController, "employeesService", employeesService);
         restServiceServer
                 .expect(requestTo("http://localhost:8080/server/employees/birthday/between/1992-01-01/1993-01-01"))
                 .andExpect(method(HttpMethod.GET))
@@ -92,25 +89,8 @@ public class EmployeesControllerTest {
         assertEquals("employees", mav.getViewName());
     }
 
-    @Test
-    public void testGetEmployeesByDepartmentName(){
-        ReflectionTestUtils.setField(employeesController, "employeesService", employeesService);
-        restServiceServer
-                .expect(requestTo("http://localhost:8080/server/employees/department/QA"))
-                .andExpect(method(HttpMethod.GET))
-                .andRespond(withSuccess(
-                        "[{\"id\":0,\"department\":\"null\",\"fullName\":\"null\"," +
-                                "\"birthday\":\"0000-00-00\",\"salary\":0}]",
-                        MediaType.APPLICATION_JSON));
-
-        ModelAndView mav = employeesController.getEmployeesByDepartmentName("QA");
-        restServiceServer.verify();
-        assertEquals("employees", mav.getViewName());
-    }
-
     /*@Test
     public void testInsert(){
-        ReflectionTestUtils.setField(employeesController, "employeesService", employeesService);
         restServiceServer
                 .expect(requestTo("http://localhost:8080/server/employees/addNewEmployee/employeeName/" +
                         "Jack/department/QA/birthday/1992-01-01/salary/1100"))
@@ -126,7 +106,6 @@ public class EmployeesControllerTest {
 
     @Test
     public void testUpdate(){
-        ReflectionTestUtils.setField(employeesController, "employeesService", employeesService);
         restServiceServer
                 .expect(requestTo("http://localhost:8080/server/employees/updatingEmployeeData/employeeId/1" +
                         "/employeeName/Jack/department/QA/birthday/1993-01-01/salary/1000"))
@@ -142,7 +121,6 @@ public class EmployeesControllerTest {
 
     @Test
     public void testDelete(){
-        ReflectionTestUtils.setField(employeesController, "employeesService", employeesService);
         restServiceServer
                 .expect(requestTo("http://localhost:8080/server/employees/remove/employee/1"))
                 .andExpect(method(HttpMethod.POST))

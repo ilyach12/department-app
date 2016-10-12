@@ -80,7 +80,6 @@ public class JdbcDepartmentsDao implements IDepartmentsDao {
                 employees.setId(employeesId);
                 employees.setFullName(rs.getString("fullName"));
                 employees.setBirthday(rs.getDate("birthday"));
-                employees.setDepartment(rs.getString("department"));
                 employees.setSalary(rs.getInt("salary"));
                 department.getEmployeesInThisDepartment().add(employees);
             }
@@ -111,20 +110,6 @@ public class JdbcDepartmentsDao implements IDepartmentsDao {
     @Override
     public List<Department> findAllWithEmployees() {
         return jdbcTemplate.query(findAllDepartmentsWithEmployees, this::handlerForFindDepartmentsWithEmployees);
-    }
-
-    /**
-     * Fining one department by name of this department and all employees in result
-     * department.
-     *
-     * @param departmentName this is a name of the sought department
-     * @return one department and list of all employees within the sought department
-     */
-    @Override
-    public List<Department> findDepartmentByNameWithEmployees(String departmentName) {
-        Map<String, String> varMap = new HashMap<>();
-        varMap.put("departmentName", departmentName);
-        return jdbcTemplate.query(findOneDepartmentWithEmployees, varMap, this::handlerForFindDepartmentsWithEmployees);
     }
 
     /**

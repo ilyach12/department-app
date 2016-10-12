@@ -12,17 +12,6 @@
 <body>
 <div class="container">
     <div class="row card">
-        <div class="col s4">
-            <h5>Search by department name: </h5>
-        </div>
-        <div class="col s4">
-            <form action="/departments/searchByName" method="get">
-                <input placeholder="department name" name="departmentName" type="search" required>
-                <button class="btn waves-effect waves-light" type="submit">Search</button>
-            </form>
-        </div>
-    </div>
-    <div class="row card">
         <div class="col s12">
             <h4>Departments</h4>
             <table class="striped">

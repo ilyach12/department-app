@@ -24,11 +24,10 @@ public class DepartmentsServiceTest {
         restServiceServer = MockRestServiceServer.createServer(restTemplate);
 
         ReflectionTestUtils.setField(departmentsService, "hostUrl", "http://localhost:8080/server/departments");
-        ReflectionTestUtils.setField(departmentsService, "byNameUri", "/{departmentName}");
         ReflectionTestUtils.setField(departmentsService, "allWithEmployeesUri", "/getAllDepartmentsWithEmployees");
-        ReflectionTestUtils.setField(departmentsService, "insertUri", "/insertNewRow/departmentName/{departmentName}");
+        ReflectionTestUtils.setField(departmentsService, "insertUri", "/addNewDepartment/departmentName/{departmentName}");
         ReflectionTestUtils.setField(departmentsService, "updateUri",
-                "/rename/departmentWithId/{id}/newName/{departmentName}");
+                "/update/departmentWithId/{id}/newName/{departmentName}");
         ReflectionTestUtils.setField(departmentsService, "deleteUri", "/remove/department/{departmentName}");
     }
 
@@ -42,19 +41,6 @@ public class DepartmentsServiceTest {
                         MediaType.APPLICATION_JSON));
 
         departmentsService.getAll();
-        restServiceServer.verify();
-    }
-
-    @Test
-    public void testGetDepartmentByNameWithEmployees(){
-        restServiceServer
-                .expect(requestTo("http://localhost:8080/server/departments/QA"))
-                .andExpect(method(HttpMethod.GET))
-                .andRespond(withSuccess(
-                        "[{\"id\":0,\"departmentName\":\"null\",\"employeesInThisDepartment\":null,\"averageSalary\":0}]",
-                        MediaType.APPLICATION_JSON));
-
-        departmentsService.getDepartmentByNameWithEmployees("QA");
         restServiceServer.verify();
     }
 
@@ -74,10 +60,10 @@ public class DepartmentsServiceTest {
     @Test
     public void testInsert(){
         restServiceServer
-                .expect(requestTo("http://localhost:8080/server/departments/insertNewRow/departmentName/Test"))
+                .expect(requestTo("http://localhost:8080/server/departments/addNewDepartment/departmentName/Test"))
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withSuccess(
-                        "{\"id\" : \"0,\"}",
+                        "{\"id\" : \"0\"}",
                         MediaType.APPLICATION_JSON));
 
         departmentsService.insert("Test");
@@ -87,10 +73,10 @@ public class DepartmentsServiceTest {
     @Test
     public void testUpdate(){
         restServiceServer
-                .expect(requestTo("http://localhost:8080/server/departments/rename/departmentWithId/1/newName/Dep"))
+                .expect(requestTo("http://localhost:8080/server/departments/update/departmentWithId/1/newName/Dep"))
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withSuccess(
-                        "{\"id\" : \"0,\"}",
+                        "{\"id\" : \"0\"}",
                         MediaType.APPLICATION_JSON));
         departmentsService.update(1L, "Dep");
         restServiceServer.verify();

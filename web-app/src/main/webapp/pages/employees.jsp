@@ -26,13 +26,6 @@
                 <button class="btn waves-effect waves-light" type="submit">Search</button>
             </form>
         </div>
-        <div class="col s5">
-            <h5>Search by department name: </h5>
-            <form action="/employees/search" method="get">
-                <input placeholder="department name" name="department" type="search" required>
-                <button class="btn waves-effect waves-light" type="submit">Search</button>
-            </form>
-        </div>
     </div>
     <div class="row card">
         <div class="col s12">
@@ -52,7 +45,7 @@
                     <tr>
                         <th>${item.id}</th>
                         <th>${item.fullName}</th>
-                        <th>${item.department}</th>
+                        <th>${item.departmentName}</th>
                         <th>${item.birthday}</th>
                         <th>${item.salary}$</th>
                     </tr>
@@ -73,7 +66,7 @@
             <h5>Add new employee</h5>
             <form action="/employees/insert" method="post">
                 <input placeholder="employee name" name="fullName" type="text" required>
-                <input placeholder="department name" name="department" type="text" required>
+                <input placeholder="department id" name="department_id" type="text" pattern="^[ 0-9]+$" required>
                 <input placeholder="birthday date" name="birthday" type="date" required>
                 <input placeholder="salary" name="salary" type="text" required>
                 <button class="btn waves-effect waves-light" type="submit">Create</button>
@@ -84,7 +77,7 @@
             <form action="/employees/update" method="post">
                 <input placeholder="id of editable employee" name="id" type="text" pattern="^[ 0-9]+$" required>
                 <input placeholder="employee name" name="fullName" type="text" required>
-                <input placeholder="department name" name="department" type="text" required>
+                <input placeholder="department id" name="department_id" type="text" pattern="^[ 0-9]+$" required>
                 <input placeholder="birthday date" name="birthday" type="date" required>
                 <input placeholder="salary" name="salary" type="text" required>
                 <button class="btn waves-effect waves-light" type="submit">Update</button>

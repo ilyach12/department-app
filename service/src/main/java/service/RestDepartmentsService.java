@@ -31,11 +31,6 @@ public class RestDepartmentsService implements IDepartmentsService {
     }
 
     @Override
-    public List<Department> getDepartmentByNameWithEmployees(String departmentName){
-        return departmentDao.findDepartmentByNameWithEmployees(departmentName);
-    }
-
-    @Override
     public void update(Long id, String departmentName){
         departmentDao.updateById(id, departmentName);
     }

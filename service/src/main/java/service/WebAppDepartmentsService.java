@@ -27,8 +27,6 @@ public class WebAppDepartmentsService implements IDepartmentsService {
      */
     @Value("${departmentsHost}")
     private String hostUrl;
-    @Value("${departmentsByName}")
-    private String byNameUri;
     @Value("${allDepartmentsWithEmployees}")
     private String allWithEmployeesUri;
     @Value("${insertDepartment}")
@@ -52,20 +50,6 @@ public class WebAppDepartmentsService implements IDepartmentsService {
     public List<Department> getAll(){
         Department[] departments = restTemplate.getForObject(hostUrl, Department[].class);
         return Arrays.asList(departments);
-    }
-
-    /**
-     * Takes department name as parameter and getting founded department.
-     *
-     * @param departmentName name of founded department
-     * @return List where contains all data about this department
-     */
-    @Override
-    public List<Department> getDepartmentByNameWithEmployees(String departmentName){
-        Map<String, String> map = new HashMap<>();
-        map.put("departmentName", departmentName);
-        Department[] department = restTemplate.getForObject(hostUrl + byNameUri, Department[].class, map);
-        return Arrays.asList(department);
     }
 
     /**

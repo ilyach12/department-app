@@ -32,19 +32,6 @@ public class DepartmentsController {
     }
 
     /**
-     * Find and get all founded departments.
-     *
-     * @param departmentName name of searching department
-     * @return list of founded departments on departmentsWithEmployees.jsp
-     */
-    @RequestMapping(value = "/searchByName", method = RequestMethod.GET)
-    public ModelAndView getDepartmentByName(@RequestParam("departmentName") String departmentName){
-        ModelAndView mav = new ModelAndView("departmentsWithEmployees");
-        mav.addObject("departmentsList", departmentsService.getDepartmentByNameWithEmployees(departmentName));
-        return mav;
-    }
-
-    /**
      * Getting all departments with list of employees who works in
      * this departments.
      *

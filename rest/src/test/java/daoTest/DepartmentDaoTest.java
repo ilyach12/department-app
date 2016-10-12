@@ -38,15 +38,10 @@ public class DepartmentDaoTest {
         departmentDao.setDataSource(ds);
         template = new JdbcTemplate(ds);
 
-        ReflectionTestUtils.setField(departmentDao, "findAllDepartments", "select d.id, d.departmentName, avg(e.salary) " +
-                "as averageSalary from department as d left join employees as e on " +
-                "d.departmentName = e.department group by e.department");
-        ReflectionTestUtils.setField(departmentDao, "findAllDepartmentsWithEmployees", "select d.id, d.departmentName," +
-                " e.id, e.fullName, e.department, e.birthday, e.salary from department as d left join employees as e on" +
-                " d.departmentName = e.department");
-        ReflectionTestUtils.setField(departmentDao, "findOneDepartmentWithEmployees", "select d.id, d.departmentName," +
-                " e.id, e.fullName, e.department, e.birthday, e.salary from department as d left join employees as e" +
-                " on d.departmentName = e.department where lower(d.departmentName) = lower(:departmentName)");
+        ReflectionTestUtils.setField(departmentDao, "findAllDepartments", "select d.*, avg(e.salary) as averageSalary" +
+                " from department as d left join employees as e on d.id = e.department_id group by d.id");
+        ReflectionTestUtils.setField(departmentDao, "findAllDepartmentsWithEmployees", "select d.*, e.* from" +
+                " department as d left join employees as e on d.id = e.department_id");
         ReflectionTestUtils.setField(departmentDao, "insertNewDepartment", "insert into department (departmentName)" +
                 " values (:departmentName)");
         ReflectionTestUtils.setField(departmentDao, "updateDepartment", "update department set" +
@@ -76,7 +71,7 @@ public class DepartmentDaoTest {
                 employees.setId(employeesId);
                 employees.setFullName(rs.getString("fullName"));
                 employees.setBirthday(rs.getDate("birthday"));
-                employees.setDepartment(rs.getString("department"));
+                employees.setDepartmentName(rs.getString("department"));
                 employees.setSalary(rs.getInt("salary"));
                 department1.getEmployeesInThisDepartment().add(employees);
             }
@@ -98,47 +93,34 @@ public class DepartmentDaoTest {
     }
 
     @Test
-    public void testFindDepartmentByNameWithEmployees(){
-        List<Department> department = departmentDao.findDepartmentByNameWithEmployees("Java");
-        assertEquals(1, department.size());
-
-        String sql = "select d.id, d.departmentName, e.id, e.fullName, e.department, e.birthday" +
-                ", e.salary from department as d left join employees as e on d.departmentName = e.department " +
-                "where lower(d.departmentName) = lower('Java')";
-        template.query(sql, this::testsHandler);
-    }
-
-    @Test
     public void testUpdate(){
         departmentDao.updateById(2L, ".NET");
-        List<Department> department = departmentDao.findDepartmentByNameWithEmployees(".NET");
 
-        String sql = "select id, departmentName from department where departmentName = '.NET'";
+        String sql = "select d.* from department as d where departmentName = '.NET'";
         template.query(sql, (rs, rowNum) -> {
             Department department1 = new Department();
             department1.setId(rs.getLong("id"));
             department1.setDepartmentName(rs.getString("departmentName"));
 
             assertEquals(".NET", department1.getDepartmentName());
-            return department;
+            return department1;
         });
     }
 
     @Test
     public void testInsert(){
         departmentDao.insertNewDepartment("Marketing");
-        List<Department> department = departmentDao.findDepartmentByNameWithEmployees("Marketing");
         List<Department> departments = departmentDao.findAll();
         assertEquals(5, departments.size());
 
-        String sql = "select id, departmentName from department where departmentName = 'Marketing'";
+        String sql = "select d.* from department as d where departmentName = 'Marketing'";
         template.query(sql, (rs, rowNum) -> {
             Department department1 = new Department();
             department1.setId(rs.getLong("id"));
             department1.setDepartmentName(rs.getString("departmentName"));
 
             assertEquals("Marketing", department1.getDepartmentName());
-            return department;
+            return department1;
         });
     }
 
@@ -146,9 +128,7 @@ public class DepartmentDaoTest {
     public void testDelete(){
         departmentDao.deleteByName("HR");
         List<Department> departments = departmentDao.findAll();
-        List<Department> department = departmentDao.findDepartmentByNameWithEmployees("HR");
         assertEquals(3, departments.size());
-        assertEquals(0, department.size());
     }
 
     @After

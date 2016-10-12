@@ -36,12 +36,17 @@ public class EmployeesServiceTest {
         employeesDao.setDataSource(ds);
 
         ReflectionTestUtils.setField(employeesService, "jdbcEmployeesDao", employeesDao);
-        ReflectionTestUtils.setField(employeesDao, "findAllEmployees", "select id, fullName, department, birthday, salary from employees");
-        ReflectionTestUtils.setField(employeesDao, "findByBirthdayDate", "select id, fullName, department, birthday, salary from employees where birthday = :birthday");
-        ReflectionTestUtils.setField(employeesDao, "findByBirthdayDateBetween", "select id, fullName, department, birthday, salary from employees where birthday >= :birthday and birthday <= :birthday1");
-        ReflectionTestUtils.setField(employeesDao, "findEmployeesByDepartmentName", "select id, fullName, department, birthday, salary from employees where lower(department) = lower(:department)");
-        ReflectionTestUtils.setField(employeesDao, "insertNewEmployee", "insert into employees (fullName, department, birthday, salary) values(:fullName, :department, :birthday, :salary)");
-        ReflectionTestUtils.setField(employeesDao, "updateEmployee", "update employees set fullName = :fullName, department = :department, birthday = :birthday, salary = :salary where id = :id");
+        ReflectionTestUtils.setField(employeesDao, "findAllEmployees", "select e.*, d.departmentName from employees" +
+                " as e left join department as d on e.department_id = d.id");
+        ReflectionTestUtils.setField(employeesDao, "findByBirthdayDate", "select e.*, d.departmentName from" +
+                " employees as e left join department as d on e.department_id = d.id where e.birthday = :birthday");
+        ReflectionTestUtils.setField(employeesDao, "findByBirthdayDateBetween", "select e.*, d.departmentName from" +
+                " employees as e left join department as d on e.department_id = d.id where" +
+                " birthday >= :birthday and birthday <= :birthday1");
+        ReflectionTestUtils.setField(employeesDao, "insertNewEmployee", "insert into employees(fullName," +
+                " department_id, birthday, salary) values(:fullName, :department_id, :birthday, :salary)");
+        ReflectionTestUtils.setField(employeesDao, "updateEmployee", "update employees set fullName = :fullName," +
+                " department_id = :department_id, birthday = :birthday, salary = :salary where id = :id");
         ReflectionTestUtils.setField(employeesDao, "deleteEmployee", "delete from employees where id = :id");
     }
 
@@ -59,12 +64,6 @@ public class EmployeesServiceTest {
     }
 
     @Test
-    public void testGetEmployeesByDepartmentName(){
-        List<Employees> employees = employeesService.getEmployeesByDepartmentName("Java");
-        assertEquals(3, employees.size());
-    }
-
-    @Test
     public void testGetEmployeesByBirthdayDateBetween(){
         String birthday = "1992-01-01";
         String birthday1 = "1995-01-01";
@@ -75,21 +74,21 @@ public class EmployeesServiceTest {
 
     @Test
     public void testInsert(){
-        employeesService.insert("Arkadiy", "Java", Date.valueOf("1985-06-14"), 1250);
+        employeesService.insert("Arkadiy", 2L, Date.valueOf("1985-06-14"), 1250);
         List<Employees> allEmployees = employeesService.getAll();
         assertEquals(13, allEmployees.size());
 
-        String sql = "select id, fullName, department, birthday, salary " +
-                "from employees where fullName = 'Arkadiy'";
+        String sql = "select e.*, d.departmentName FROM employees AS e LEFT JOIN department" +
+                " as d on e.department_id = d.id where fullName = 'Arkadiy'";
         template.query(sql, (rs, rowNum) -> {
             Employees em = new Employees();
             em.setId(rs.getLong("id"));
             em.setFullName(rs.getString("fullName"));
-            em.setDepartment(rs.getString("department"));
+            em.setDepartmentName(rs.getString("departmentName"));
             em.setBirthday(rs.getDate("birthday"));
             em.setSalary(rs.getInt("salary"));
 
-            assertEquals("Java", em.getDepartment());
+            assertEquals("Java", em.getDepartmentName());
             assertEquals("Arkadiy", em.getFullName());
             assertEquals(Date.valueOf("1985-06-14"), em.getBirthday());
             assertEquals(1250, em.getSalary());
@@ -99,20 +98,20 @@ public class EmployeesServiceTest {
 
     @Test
     public void testUpdate(){
-        employeesService.update(1L, "Julian", "dotNOT", Date.valueOf("1995-08-11"), 1700);
+        employeesService.update(1L, "Julian", 3L, Date.valueOf("1995-08-11"), 1700);
 
-        String sql = "select id, fullName, department, birthday, salary " +
-                "from employees where fullName = 'Julian'";
+        String sql = "select e.*, d.departmentName from employees as e left join department" +
+                " as d on e.department_id = d.id where fullName = 'Arkadiy'";
         template.query(sql, (rs, rowNum) -> {
             Employees em = new Employees();
             em.setId(rs.getLong("id"));
             em.setFullName(rs.getString("fullName"));
-            em.setDepartment(rs.getString("department"));
+            em.setDepartmentName(rs.getString("department"));
             em.setBirthday(rs.getDate("birthday"));
             em.setSalary(rs.getInt("salary"));
 
             assertEquals("Julian", em.getFullName());
-            assertEquals("dotNOT", em.getDepartment());
+            assertEquals("dotNOT", em.getDepartmentName());
             assertEquals(Date.valueOf("1995-08-11"), em.getBirthday());
             assertEquals(1700, em.getSalary());
             return em;

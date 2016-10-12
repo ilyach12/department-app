@@ -44,15 +44,10 @@ public class DepartmentsControllerTest {
 
         ReflectionTestUtils.setField(departmentsService, "departmentDao", departmentDao);
         ReflectionTestUtils.setField(departmentsController, "departmentsService", departmentsService);
-        ReflectionTestUtils.setField(departmentDao, "findAllDepartments", "select d.id, d.departmentName, avg(e.salary) " +
-                "as averageSalary from department as d left join employees as e on " +
-                "d.departmentName = e.department group by e.department");
-        ReflectionTestUtils.setField(departmentDao, "findAllDepartmentsWithEmployees", "select d.id, d.departmentName," +
-                " e.id, e.fullName, e.department, e.birthday, e.salary from department as d left join employees as e on" +
-                " d.departmentName = e.department");
-        ReflectionTestUtils.setField(departmentDao, "findOneDepartmentWithEmployees", "select d.id, d.departmentName," +
-                " e.id, e.fullName, e.department, e.birthday, e.salary from department as d left join employees as e" +
-                " on d.departmentName = e.department where lower(d.departmentName) = lower(:departmentName)");
+        ReflectionTestUtils.setField(departmentDao, "findAllDepartments", "select d.*, avg(e.salary) as averageSalary" +
+                " from department as d left join employees as e on d.id = e.department_id group by d.id");
+        ReflectionTestUtils.setField(departmentDao, "findAllDepartmentsWithEmployees", "select d.*, e.* from" +
+                " department as d left join employees as e on d.id = e.department_id");
         ReflectionTestUtils.setField(departmentDao, "insertNewDepartment", "insert into department (departmentName)" +
                 " values (:departmentName)");
         ReflectionTestUtils.setField(departmentDao, "updateDepartment", "update department set" +
@@ -82,7 +77,7 @@ public class DepartmentsControllerTest {
                 employees.setId(employeesId);
                 employees.setFullName(rs.getString("fullName"));
                 employees.setBirthday(rs.getDate("birthday"));
-                employees.setDepartment(rs.getString("department"));
+                employees.setDepartmentName(rs.getString("department"));
                 employees.setSalary(rs.getInt("salary"));
                 department1.getEmployeesInThisDepartment().add(employees);
             }
@@ -104,28 +99,16 @@ public class DepartmentsControllerTest {
     }
 
     @Test
-    public void testGetDepartmentByNameWithEmployees(){
-        List<Department> departments = departmentsController.getDepartmentByNameWithEmployees("dotNOT");
-        assertEquals(1, departments.size());
-
-        String sql = "select d.id, d.departmentName, e.id, e.fullName, e.department, e.birthday" +
-                ", e.salary from department as d left join employees as e on d.departmentName = e.department " +
-                "where lower(d.departmentName) = lower('dotNOT')";
-        template.query(sql, this::testsHandler);
-    }
-
-    @Test
     public void testUpdate(){
         departmentsController.updateDepartmentNameById(2L, ".NET");
-        List<Department> department = departmentsController.getDepartmentByNameWithEmployees(".NET");
 
-        String sql = "select id, departmentName from department where departmentName = '.NET'";
+        String sql = "select d.* from department as d where departmentName = '.NET'";
         template.query(sql, (rs, rowNum) -> {
-            Department department1 = new Department();
-            department1.setId(rs.getLong("id"));
-            department1.setDepartmentName(rs.getString("departmentName"));
+            Department department = new Department();
+            department.setId(rs.getLong("id"));
+            department.setDepartmentName(rs.getString("departmentName"));
 
-            assertEquals(".NET", department1.getDepartmentName());
+            assertEquals(".NET", department.getDepartmentName());
             return department;
         });
     }
@@ -133,17 +116,16 @@ public class DepartmentsControllerTest {
     @Test
     public void testInsert(){
         departmentsController.insertNewDepartment("Marketing");
-        List<Department> department = departmentsController.getDepartmentByNameWithEmployees("Marketing");
         List<Department> departments = departmentsController.getAllDepartments();
         assertEquals(5, departments.size());
 
-        String sql = "select id, departmentName from department where departmentName = 'Marketing'";
+        String sql = "select d.* from department as d where departmentName = 'Marketing'";
         template.query(sql, (rs, rowNum) -> {
-            Department department1 = new Department();
-            department1.setId(rs.getLong("id"));
-            department1.setDepartmentName(rs.getString("departmentName"));
+            Department department = new Department();
+            department.setId(rs.getLong("id"));
+            department.setDepartmentName(rs.getString("departmentName"));
 
-            assertEquals("Marketing", department1.getDepartmentName());
+            assertEquals("Marketing", department.getDepartmentName());
             return department;
         });
     }
@@ -152,9 +134,7 @@ public class DepartmentsControllerTest {
     public void testDelete(){
         departmentsController.deleteDepartmentByName("HR");
         List<Department> departments = departmentsController.getAllDepartments();
-        List<Department> department = departmentsController.getDepartmentByNameWithEmployees("HR");
         assertEquals(3, departments.size());
-        assertEquals(0, department.size());
     }
 
     @After

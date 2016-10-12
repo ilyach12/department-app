@@ -8,10 +8,11 @@ import java.sql.Date;
 public class Employees {
 
     private Long id;
-    private String department;
+    private String departmentName;
     private String fullName;
     private Date birthday;
     private int salary;
+    private Long department_id;
 
     public Long getId() {
         return id;
@@ -21,12 +22,12 @@ public class Employees {
         this.id = id;
     }
 
-    public String getDepartment() {
-        return department;
+    public String getDepartmentName() {
+        return departmentName;
     }
 
-    public void setDepartment(String department) {
-        this.department = department;
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 
     public String getFullName() {
@@ -51,5 +52,13 @@ public class Employees {
 
     public void setSalary(int salary) {
         this.salary = salary;
+    }
+
+    public Long getDepartment_id() {
+        return department_id;
+    }
+
+    public void setDepartment_id(Long department_id) {
+        this.department_id = department_id;
     }
 }
