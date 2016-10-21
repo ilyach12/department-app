@@ -2,7 +2,6 @@ package daoTest;
 
 import dao.JdbcDepartmentsDao;
 import model.Department;
-import model.Employees;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,12 +11,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -48,36 +42,6 @@ public class DepartmentDaoTest {
                 " departmentName = :departmentName where id=:id");
         ReflectionTestUtils.setField(departmentDao, "deleteDepartment", "delete from department" +
                 " where lower(departmentName) = lower(:departmentName)");
-    }
-
-    private List<Department> testsHandler(ResultSet rs) throws SQLException {
-        Map<Long, Department> map = new HashMap<>();
-        Department department1 = null;
-        while (rs.next()){
-            Long id = rs.getLong("department.id");
-            department1 = map.get(id);
-
-            if (department1 == null){
-                department1 = new Department();
-                department1.setId(rs.getLong("department.id"));
-                department1.setDepartmentName(rs.getString("departmentName"));
-                department1.setEmployeesInThisDepartment(new ArrayList<>());
-                map.put(id, department1);
-            }
-
-            Long employeesId = rs.getLong("employees.id");
-            if (employeesId > 0){
-                Employees employees = new Employees();
-                employees.setId(employeesId);
-                employees.setFullName(rs.getString("fullName"));
-                employees.setBirthday(rs.getDate("birthday"));
-                employees.setDepartmentName(rs.getString("department"));
-                employees.setSalary(rs.getInt("salary"));
-                department1.getEmployeesInThisDepartment().add(employees);
-            }
-        }
-        assertEquals(3, department1.getEmployeesInThisDepartment().size());
-        return new ArrayList<>(map.values());
     }
 
     @Test

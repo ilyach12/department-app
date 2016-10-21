@@ -10,15 +10,13 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * This class working with database. He annotated as repository this Indicates
+ * This class provides access for the database. He annotated as repository this Indicates
  * that an annotated class is a "Repository", originally defined by Domain-Driven
  * Design (Evans, 2003) as "a mechanism for encapsulating storage, retrieval,
  * and search behavior which emulates a collection of objects".
@@ -43,49 +41,10 @@ public class JdbcDepartmentsDao implements IDepartmentsDao {
     @Value("${query.deleteDepartment}")
     private String deleteDepartment;
 
-    /**
-     * The {@code setDataSource} method is the data access layer`s initialization method.
-     * The {@code SimpleJdbcInsert} classes provide a simplified configuration by taking advantage of
-     * database metadata that can be retrieved through the JDBC driver. Simply created a new instance
-     * and set the table name using the {@code withTableName} method and specify the name of the
-     * generated key column with the {@code usingGeneratedKeyColumns} method.
-     *
-     * @param dataSource autowired of DataBaseConfig.class who located in config package
-     */
     @Override
     @Autowired
     public void setDataSource(DataSource dataSource) {
         jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }
-
-    private List<Department> handlerForFindDepartmentsWithEmployees(ResultSet rs) throws SQLException{
-        Map<Long, Department> map = new HashMap<>();
-        Department department;
-
-        while (rs.next()){
-            Long id = rs.getLong("department.id");
-            department = map.get(id);
-
-            if (department == null){
-                department = new Department();
-                department.setId(rs.getLong("department.id"));
-                department.setDepartmentName(rs.getString("departmentName"));
-                department.setEmployeesInThisDepartment(new ArrayList<>());
-                map.put(id, department);
-            }
-            
-            Long employeesId = rs.getLong("employees.id");
-            if (employeesId > 0){
-                Employees employees = new Employees();
-                employees.setId(employeesId);
-                employees.setFullName(rs.getString("fullName"));
-                employees.setBirthday(rs.getDate("birthday"));
-                employees.setSalary(rs.getInt("salary"));
-                department.getEmployeesInThisDepartment().add(employees);
-            }
-        }
-
-        return new ArrayList<>(map.values());
     }
 
     @Override
@@ -100,23 +59,48 @@ public class JdbcDepartmentsDao implements IDepartmentsDao {
     }
 
     /**
-     * Finding all departments and add to list {@code employeesInThisDepartment}
-     * all, who has <tt>departmentId</tt> in Employees table equals
-     * <tt>Id</tt> in Department table.
+     * Finds all departments and adds to the list of employees working in these departments.
      *
-     * @return <tt>List</tt> of all departments and <tt>List</tt> with all employees on
-     * this departments.
+     * @return <tt>List</tt> of all departments with employees.
      */
     @Override
     public List<Department> findAllWithEmployees() {
-        return jdbcTemplate.query(findAllDepartmentsWithEmployees, this::handlerForFindDepartmentsWithEmployees);
+        return jdbcTemplate.query(findAllDepartmentsWithEmployees, (rs) -> {
+            Map<Long, Department> map = new HashMap<>();
+            Department department;
+
+            while (rs.next()){
+                Long id = rs.getLong("department.id");
+                department = map.get(id);
+
+                if (department == null){
+                    department = new Department();
+                    department.setId(rs.getLong("department.id"));
+                    department.setDepartmentName(rs.getString("departmentName"));
+                    department.setEmployeesInThisDepartment(new ArrayList<>());
+                    map.put(id, department);
+                }
+
+                Long employeesId = rs.getLong("employees.id");
+                if (employeesId > 0){
+                    Employees employees = new Employees();
+                    employees.setId(employeesId);
+                    employees.setFullName(rs.getString("fullName"));
+                    employees.setBirthday(rs.getDate("birthday"));
+                    employees.setSalary(rs.getInt("salary"));
+                    department.getEmployeesInThisDepartment().add(employees);
+                }
+            }
+
+            return new ArrayList<>(map.values());
+        });
     }
 
     /**
-     * Inserting new row into Department table taking department name and generate Id
-     * for new department.
+     * Inserting new row into Department table taking department name and generate Id.
+     * for inserted department.
      *
-     * @param departmentName name of new insertable department
+     * @param departmentName name of new department
      */
     @Override
     public void insertNewDepartment(String departmentName) {
@@ -126,7 +110,7 @@ public class JdbcDepartmentsDao implements IDepartmentsDao {
     }
 
     /**
-     * Updating department name in the Department table.
+     * Update department name in the Department table.
      *
      * @param id Id of the department that you want to updateById
      * @param departmentName is a new department name that will replace the old name
@@ -139,9 +123,8 @@ public class JdbcDepartmentsDao implements IDepartmentsDao {
         jdbcTemplate.update(updateDepartment, map);
     }
 
-
     /**
-     * Deleting row where department name compiles {@code departmentName} param
+     * Removes the row where the name of the card matches {@code departmentName} parameter.
      *
      * @param departmentName is a department name that will removed of Department table
      */

@@ -15,7 +15,7 @@ import java.util.Map;
 
 /**
  * This a service class and he getting data from REST service by uri.
- * {@code EmployeeService} using RestTemplate class for the implementation
+ * {@code WebAppEmployeeService} using RestTemplate class for the implementation
  * of data access.
  */
 @Service
@@ -45,7 +45,7 @@ public class WebAppEmployeesService implements IEmployeesService {
     }
 
     /**
-     * {@code getAll()} method getting all employees from REST.
+     * {@code getAll()} gets all employees from REST.
      *
      * @return List of all employees
      */
@@ -77,7 +77,7 @@ public class WebAppEmployeesService implements IEmployeesService {
      *
      * @param birthday first b-day date
      * @param birthday1 second b-day date
-     * @return List of all fond employees who has b-day date between taking parameters
+     * @return List of all employees found
      */
     @Override
     public List<Employees> getEmployeesByBirthdayDateBetween(Date birthday, Date birthday1) {

@@ -78,6 +78,7 @@ public class DepartmentsServiceTest {
                 .andRespond(withSuccess(
                         "{\"id\" : \"0\"}",
                         MediaType.APPLICATION_JSON));
+
         departmentsService.update(1L, "Dep");
         restServiceServer.verify();
     }

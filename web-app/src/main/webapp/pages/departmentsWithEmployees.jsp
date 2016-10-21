@@ -17,7 +17,7 @@
             <table class="striped">
                 <thead>
                     <tr>
-                        <th>Id</th>
+                        <th>ID</th>
                         <th>Department</th>
                         <th>Employees</th>
                     </tr>
@@ -28,10 +28,9 @@
                     <tr>
                         <th>${item.id}</th>
                         <th>${item.departmentName}</th>
-                        <th style="line-height: 1.5">
+                        <th style="line-height: 1.6">
                         <c:forEach items="${item.employeesInThisDepartment}" var="empl">
-                            name: ${empl.fullName}, department: ${empl.departmentName},
-                            salary: ${empl.salary}$, birthday: ${empl.birthday};<br>
+                           Name: ${empl.fullName} | Salary: ${empl.salary}$ | Birthday date: ${empl.birthday}<br>
                         </c:forEach>
                     </tr>
                 </c:forEach>

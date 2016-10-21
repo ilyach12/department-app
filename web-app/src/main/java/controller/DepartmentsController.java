@@ -22,7 +22,7 @@ public class DepartmentsController {
     private WebAppDepartmentsService departmentsService;
 
     /**
-     * Getting all departments on departments.jsp
+     * Gets all departments and outputs into departments.jsp
      */
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView getAll(){
@@ -32,8 +32,8 @@ public class DepartmentsController {
     }
 
     /**
-     * Getting all departments with list of employees who works in
-     * this departments.
+     * Gets all departments with list of employees who works in
+     * these departments.
      *
      * @return list of all departments with employees from this departments
      */
@@ -45,7 +45,7 @@ public class DepartmentsController {
     }
 
     /**
-     * Inserting new department on database.
+     * Inserting new department in the database.
      *
      * @param departmentName name of new department
      * @return list of all departments on departments.jsp
@@ -57,7 +57,7 @@ public class DepartmentsController {
     }
 
     /**
-     * Edit information about department by id.
+     * Update department name by id.
      *
      * @param id id of editable department
      * @param departmentName new name for this department

@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * This a service class and he getting data from REST service by uri.
- * {@code DepartmentService} using RestTemplate class for the implementation
+ * {@code WebAppDepartmentService} using RestTemplate class for the implementation
  * of data access.
  */
 @Service
@@ -42,7 +42,7 @@ public class WebAppDepartmentsService implements IDepartmentsService {
     }
 
     /**
-     * {@code getAll} method getting all departments from REST.
+     * {@code getAll()} gets all departments from REST.
      *
      * @return List of all employees
      */
@@ -53,7 +53,7 @@ public class WebAppDepartmentsService implements IDepartmentsService {
     }
 
     /**
-     * {@code getAllDepartmentsWithEmployees} method getting all departments and list of all
+     * {@code getAllDepartmentsWithEmployees()} getting all departments and list of all
      * employees who works in this department.
      *
      * @return List of all departments
@@ -77,7 +77,7 @@ public class WebAppDepartmentsService implements IDepartmentsService {
     }
 
     /**
-     * Updating information about department by ID of this department.
+     * Update information about department by ID of this department.
      *
      * @param id id of editable department
      * @param departmentName new name for department
@@ -91,7 +91,7 @@ public class WebAppDepartmentsService implements IDepartmentsService {
     }
 
     /**
-     * Delete department by his name from database.
+     * Delete department by name from database.
      *
      * @param departmentName name of department
      */

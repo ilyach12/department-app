@@ -32,11 +32,12 @@
             <table class="striped">
                 <thead>
                 <tr>
-                    <th>Id</th>
+                    <th>ID</th>
                     <th>Full name</th>
                     <th>Department</th>
                     <th>Birthday</th>
                     <th>Salary</th>
+                    <th>Department ID</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -48,6 +49,7 @@
                         <th>${item.departmentName}</th>
                         <th>${item.birthday}</th>
                         <th>${item.salary}$</th>
+                        <th>${item.department_id}</th>
                     </tr>
                 </c:forEach>
                 </tbody>

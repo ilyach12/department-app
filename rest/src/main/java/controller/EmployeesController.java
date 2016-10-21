@@ -31,9 +31,9 @@ public class EmployeesController {
     private final Logger logger = LoggerFactory.getLogger(EmployeesController.class);
 
     /**
-     * Getting all employees from database.
+     * Gets all employees from the database.
      *
-     * @return List of all employees in Json format
+     * @return List of all employees
      */
     @RequestMapping(method = RequestMethod.GET)
     public List<Employees> getAllEmployees(){
@@ -42,10 +42,10 @@ public class EmployeesController {
 
     /**
      * {@code getEmployeesByBirthdayDate()} Getting all employees who has b-day date
-     * like date taking as parameter.
+     * like date taken as parameter.
      *
      * @param birthday date of b-day employee
-     * @return List of all founded employees in Json format
+     * @return List of all founded employees
      */
     @RequestMapping(value = "/birthday/{birthday}", method = RequestMethod.GET)
     public List<Employees> getEmployeesByBirthdayDate(@PathVariable("birthday") Date birthday){
@@ -53,11 +53,11 @@ public class EmployeesController {
     }
 
     /**
-     * Found employees who has b-day between dates taking as parameters.
+     * Find employees who have b-day between the dates taken as parameters.
      *
      * @param birthday first date of b-day
      * @param birthday1 second date of b-day
-     * @return List of all founded employees in Json format
+     * @return List of all founded employees
      */
     @RequestMapping(value = "/birthday/between/{birthday}/{birthday1}", method = RequestMethod.GET)
     public List<Employees> getEmployeesByBirthdayDateBetween(@PathVariable("birthday") Date birthday,
@@ -66,9 +66,9 @@ public class EmployeesController {
     }
 
     /**
-     * Insert new employee in database. Id generate automatically.
+     * Insert new employee in database.
      *
-     * @return List of all employees in Json format
+     * @return List of all employees
      */
     @RequestMapping(value = "/addNewEmployee/employeeName/{employeeName}/departmentId/{department_id}/" +
             "birthday/{birthday}/salary/{salary}", method = RequestMethod.POST)
@@ -82,9 +82,9 @@ public class EmployeesController {
     }
 
     /**
-     * Update information about employee by id of this employee.
+     * Update information about the employee by Id.
      *
-     * @return List of all employees in Json format
+     * @return List of all employees
      */
     @RequestMapping(value = "/updateEmployeeData/employeeId/{id}/employeeName/{employeeName}/" +
             "departmentId/{department_id}/birthday/{birthday}/salary/{salary}", method = RequestMethod.POST)
@@ -99,10 +99,10 @@ public class EmployeesController {
     }
 
     /**
-     * Remove employee by name from database.
+     * Removes the employee by name from the database.
      *
      * @param id id of employee who must be deleted
-     * @return List of all employees in Json format
+     * @return List of all employees
      */
     @RequestMapping(value = "/remove/employee/{id}", method = RequestMethod.POST)
     public List<Employees> deleteEmployeeById(@PathVariable("id") Long id){

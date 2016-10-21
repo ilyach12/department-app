@@ -24,7 +24,7 @@ public class EmployeesController {
     private WebAppEmployeesService employeesService;
 
     /**
-     * This method getting list of all employees.
+     * Gets list of all employees and outputs into employees.jsp.
      *
      * @return employees.jsp with list of all employees
      */
@@ -36,7 +36,7 @@ public class EmployeesController {
     }
 
     /**
-     * {@code getEmployeesByBirthdayDate()} finds employees who has b-day date
+     * {@code getEmployeesByBirthdayDate()} finds the employees who has b-day date
      * equal date takes as parameter.
      *
      * @param birthday b-day date
@@ -50,8 +50,8 @@ public class EmployeesController {
     }
 
     /**
-     * Getting employees who has date of b-day between dates taking as
-     * parameters,
+     * Gets the employees who has date of b-day between dates taking as
+     * parameters.
      *
      * @param birthday first b-day date
      * @param birthday1 second b-day date
@@ -93,7 +93,7 @@ public class EmployeesController {
 
     /**
      * Delete employee from database by id.
-     * @param id of employee who must be deleted
+     *
      * @return employees.jsp with list of all employees
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)

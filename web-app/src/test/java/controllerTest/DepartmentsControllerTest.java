@@ -11,7 +11,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import service.WebAppDepartmentsService;
 
-import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.ModelAndViewAssert.assertModelAttributeAvailable;
+import static org.springframework.test.web.ModelAndViewAssert.assertViewName;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
@@ -47,7 +48,8 @@ public class DepartmentsControllerTest {
 
         ModelAndView mav = departmentsController.getAll();
         restServiceServer.verify();
-        assertEquals("departments", mav.getViewName());
+        assertViewName(mav, "departments");
+        assertModelAttributeAvailable(mav, "departmentsList");
     }
 
     @Test
@@ -61,35 +63,52 @@ public class DepartmentsControllerTest {
 
         ModelAndView mav = departmentsController.getAllDepartmentsWithEmployees();
         restServiceServer.verify();
-        assertEquals("departmentsWithEmployees", mav.getViewName());
+        assertViewName(mav, "departmentsWithEmployees");
+        assertModelAttributeAvailable(mav, "departmentsList");
     }
 
-    /*@Test
+    @Test
     public void testInsert(){
         restServiceServer
-                .expect(requestTo("http://localhost:8080/server/departments/insertNewRow/departmentName/Test"))
+                .expect(requestTo("http://localhost:8080/server/departments/addNewDepartment/departmentName/Test"))
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withSuccess(
                         "{\"id\" : \"0\"}",
                         MediaType.APPLICATION_JSON));
 
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/departments"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(
+                        "[{\"id\":0,\"departmentName\":\"null\",\"employeesInThisDepartment\":null,\"averageSalary\":0}]",
+                        MediaType.APPLICATION_JSON));
+
         ModelAndView mav = departmentsController.insertNewDepartment("Test");
         restServiceServer.verify();
-        assertEquals("departments", mav.getViewName());
+        assertViewName(mav, "departments");
+        assertModelAttributeAvailable(mav, "departmentsList");
     }
 
     @Test
     public void testUpdate(){
         restServiceServer
-                .expect(requestTo("http://localhost:8080/server/departments/rename/departmentWithId/1/newName/Dep"))
+                .expect(requestTo("http://localhost:8080/server/departments/update/departmentWithId/1/newName/Dep"))
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withSuccess(
                         "{\"id\" : \"0\"}",
                         MediaType.APPLICATION_JSON));
 
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/departments"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(
+                        "[{\"id\":0,\"departmentName\":\"null\",\"employeesInThisDepartment\":null,\"averageSalary\":0}]",
+                        MediaType.APPLICATION_JSON));
+
         ModelAndView mav = departmentsController.updateDepartmentById(1L, "Dep");
         restServiceServer.verify();
-        assertEquals("departments", mav.getViewName());
+        assertViewName(mav, "departments");
+        assertModelAttributeAvailable(mav, "departmentsList");
     }
 
     @Test
@@ -101,8 +120,16 @@ public class DepartmentsControllerTest {
                         "{\"id\" : \"0\"}",
                         MediaType.APPLICATION_JSON));
 
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/departments"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(
+                        "[{\"id\":0,\"departmentName\":\"null\",\"employeesInThisDepartment\":null,\"averageSalary\":0}]",
+                        MediaType.APPLICATION_JSON));
+
         ModelAndView mav = departmentsController.deleteDepartmentByName("QA");
         restServiceServer.verify();
-        assertEquals("departments", mav.getViewName());
-    }*/
+        assertViewName(mav, "departments");
+        assertModelAttributeAvailable(mav, "departmentsList");
+    }
 }

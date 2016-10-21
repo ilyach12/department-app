@@ -1,10 +1,14 @@
 package config;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.init.DataSourceInitializer;
+import org.springframework.jdbc.datasource.init.DatabasePopulator;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
@@ -21,6 +25,14 @@ public class DataBaseConnection {
     @Resource
     private Environment env;
 
+    @Value("classpath:db/schema.sql")
+    private org.springframework.core.io.Resource schemaScript;
+    @Value("classpath:db/data.sql")
+    private org.springframework.core.io.Resource dataScript;
+
+    /**
+     * {@code dataSource()} provides database connection.
+     */
     @Bean
     public DataSource dataSource() {
         BasicDataSource ds = new BasicDataSource();
@@ -29,14 +41,26 @@ public class DataBaseConnection {
         ds.setDriverClassName(env.getRequiredProperty("db.driver"));
         ds.setUsername(env.getRequiredProperty("db.username"));
         ds.setPassword(env.getRequiredProperty("db.password"));
-        ds.setInitialSize(Integer.valueOf(env.getRequiredProperty("db.initialSize")));
-        ds.setMinIdle(Integer.valueOf(env.getRequiredProperty("db.minIdle")));
-        ds.setMaxIdle(Integer.valueOf(env.getRequiredProperty("db.maxIdle")));
-        ds.setTimeBetweenEvictionRunsMillis(Long.valueOf(env.getRequiredProperty("db.timeBetweenEvictionRunsMillis")));
-        ds.setMinEvictableIdleTimeMillis(Long.valueOf(env.getRequiredProperty("db.minEvictableIdleTimeMillis")));
-        ds.setTestOnBorrow(Boolean.valueOf(env.getRequiredProperty("db.testOnBorrow")));
 
         return ds;
+    }
+
+    @Bean
+    public DataSourceInitializer dataSourceInitializer(final DataSource dataSource) {
+        final DataSourceInitializer initializer = new DataSourceInitializer();
+        initializer.setDataSource(dataSource);
+        initializer.setDatabasePopulator(databasePopulator());
+        return initializer;
+    }
+
+    /**
+     * Inserts test data into Database.
+     */
+    private DatabasePopulator databasePopulator() {
+        final ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+        populator.addScript(schemaScript);
+        populator.addScript(dataScript);
+        return populator;
     }
 
     @Bean

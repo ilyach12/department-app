@@ -17,7 +17,7 @@
             <table class="striped">
                 <thead>
                     <tr>
-                        <th>Id</th>
+                        <th>ID</th>
                         <th>Department</th>
                         <th>Average salary</th>
                     </tr>

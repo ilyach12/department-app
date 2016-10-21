@@ -34,9 +34,10 @@ public class EmployeesControllerTest {
         ReflectionTestUtils.setField(employeesService, "byBdayUri", "/birthday/{birthday}");
         ReflectionTestUtils.setField(employeesService, "byBdayBetweenUri", "/birthday/between/{birthday}/{birthday1}");
         ReflectionTestUtils.setField(employeesService, "insertUri",
-                "/addNewEmployee/employeeName/{fullName}/department/{department}/birthday/{birthday}/salary/{salary}");
+                "/addNewEmployee/employeeName/{fullName}/departmentId/{department_id}/birthday/{birthday}/salary/{salary}");
         ReflectionTestUtils.setField(employeesService, "updateUri",
-                "/updatingEmployeeData/employeeId/{id}/employeeName/{fullName}/department/{department}/birthday/{birthday}/salary/{salary}");
+                "/updateEmployeeData/employeeId/{id}/employeeName/{fullName}/departmentId/{department_id}/birthday/" +
+                        "{birthday}/salary/{salary}");
         ReflectionTestUtils.setField(employeesService, "deleteUri", "/remove/employee/{id}");
     }
 
@@ -46,8 +47,8 @@ public class EmployeesControllerTest {
                 .expect(requestTo("http://localhost:8080/server/employees"))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withSuccess(
-                        "[{\"id\":0,\"department\":\"null\",\"fullName\":\"null\"," +
-                                "\"birthday\":\"0000-00-00\",\"salary\":0}]",
+                        "[{\"id\":0,\"departmentName\":\"null\",\"fullName\":\"null\"," +
+                                "\"birthday\":\"0000-00-00\",\"salary\":0,\"department_id\":0}]",
                         MediaType.APPLICATION_JSON));
 
         ModelAndView mav = employeesController.getAll();
@@ -61,8 +62,8 @@ public class EmployeesControllerTest {
                 .expect(requestTo("http://localhost:8080/server/employees/birthday/1992-01-01"))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withSuccess(
-                        "[{\"id\":0,\"department\":\"null\",\"fullName\":\"null\"," +
-                                "\"birthday\":\"0000-00-00\",\"salary\":0}]",
+                        "[{\"id\":0,\"departmentName\":\"null\",\"fullName\":\"null\"," +
+                                "\"birthday\":\"0000-00-00\",\"salary\":0,\"department_id\":0}]",
                         MediaType.APPLICATION_JSON));
 
         String birthday = "1992-01-01";
@@ -77,8 +78,8 @@ public class EmployeesControllerTest {
                 .expect(requestTo("http://localhost:8080/server/employees/birthday/between/1992-01-01/1993-01-01"))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withSuccess(
-                        "[{\"id\":0,\"department\":\"null\",\"fullName\":\"null\"," +
-                                "\"birthday\":\"0000-00-00\",\"salary\":0}]",
+                        "[{\"id\":0,\"departmentName\":\"null\",\"fullName\":\"null\"," +
+                                "\"birthday\":\"0000-00-00\",\"salary\":0,\"department_id\":0}]",
                         MediaType.APPLICATION_JSON));
 
         String birthday = "1992-01-01";
@@ -89,17 +90,25 @@ public class EmployeesControllerTest {
         assertEquals("employees", mav.getViewName());
     }
 
-    /*@Test
+    @Test
     public void testInsert(){
         restServiceServer
                 .expect(requestTo("http://localhost:8080/server/employees/addNewEmployee/employeeName/" +
-                        "Jack/department/QA/birthday/1992-01-01/salary/1100"))
+                        "Jack/departmentId/2/birthday/1992-01-01/salary/1100"))
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withSuccess(
                         "{\"id\" : \"0\"}",
                         MediaType.APPLICATION_JSON));
 
-        ModelAndView mav = employeesController.insertNewEmployee("Jack", "QA", Date.valueOf("1992-01-01"), 1100);
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/employees"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(
+                        "[{\"id\":0,\"departmentName\":\"null\",\"fullName\":\"null\"," +
+                                "\"birthday\":\"0000-00-00\",\"salary\":0,\"department_id\":0}]",
+                        MediaType.APPLICATION_JSON));
+
+        ModelAndView mav = employeesController.insertNewEmployee("Jack", 2L, Date.valueOf("1992-01-01"), 1100);
         restServiceServer.verify();
         assertEquals("employees", mav.getViewName());
     }
@@ -107,14 +116,22 @@ public class EmployeesControllerTest {
     @Test
     public void testUpdate(){
         restServiceServer
-                .expect(requestTo("http://localhost:8080/server/employees/updatingEmployeeData/employeeId/1" +
-                        "/employeeName/Jack/department/QA/birthday/1993-01-01/salary/1000"))
+                .expect(requestTo("http://localhost:8080/server/employees/updateEmployeeData/employeeId/1" +
+                        "/employeeName/Jack/departmentId/2/birthday/1993-01-01/salary/1000"))
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withSuccess(
                         "{\"id\" : \"0\"}",
                         MediaType.APPLICATION_JSON));
 
-        ModelAndView mav = employeesController.updateEmployeeById(1L, "Jack", "QA", Date.valueOf("1993-01-01"), 1000);
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/employees"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(
+                        "[{\"id\":0,\"departmentName\":\"null\",\"fullName\":\"null\"," +
+                                "\"birthday\":\"0000-00-00\",\"salary\":0,\"department_id\":0}]",
+                        MediaType.APPLICATION_JSON));
+
+        ModelAndView mav = employeesController.updateEmployeeById(1L, "Jack", 2L, Date.valueOf("1993-01-01"), 1000);
         restServiceServer.verify();
         assertEquals("employees", mav.getViewName());
     }
@@ -128,8 +145,16 @@ public class EmployeesControllerTest {
                         "{\"id\" : \"0\"}",
                         MediaType.APPLICATION_JSON));
 
+        restServiceServer
+                .expect(requestTo("http://localhost:8080/server/employees"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(
+                        "[{\"id\":0,\"departmentName\":\"null\",\"fullName\":\"null\"," +
+                                "\"birthday\":\"0000-00-00\",\"salary\":0,\"department_id\":0}]",
+                        MediaType.APPLICATION_JSON));
+
         ModelAndView mav = employeesController.deleteEmployeeById(1L);
         restServiceServer.verify();
         assertEquals("employees", mav.getViewName());
-    }*/
+    }
 }
