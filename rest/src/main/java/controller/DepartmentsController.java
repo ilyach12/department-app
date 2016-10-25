@@ -16,9 +16,6 @@ import java.util.List;
 /**
  * Rest service controller. This class returned all needs data under the
  * relevant mapping on Json format.
- * For use this API you just need use {@code RestTemplate} class on
- * Spring framework and contact for relevant mapping for gets all
- * needs data.
  */
 @RestController
 @RequestMapping("/departments")

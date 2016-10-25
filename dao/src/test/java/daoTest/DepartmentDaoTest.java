@@ -25,8 +25,8 @@ public class DepartmentDaoTest {
     public void setUp() {
         ds = new EmbeddedDatabaseBuilder()
                 .setType(EmbeddedDatabaseType.H2)
-                .addScript("db/create-db.sql")
-                .addScript("db/insert-data.sql")
+                .addScript("db/testDb/create-db.sql")
+                .addScript("db/testDb/insert-data.sql")
                 .build();
 
         departmentDao.setDataSource(ds);
