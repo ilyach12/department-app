@@ -13,14 +13,14 @@
     <div class="row card">
         <div class="col s5">
             <h5>Search by birthday: </h5>
-            <form action="/employees/findEmployeesByBirthday" method="get">
+            <form action="/web-app-1.0-SNAPSHOT/employees/findEmployeesByBirthday" method="get">
                 <input name="birthday" type="date" required>
                 <button class="btn waves-effect waves-light" type="submit">Search</button>
             </form>
         </div>
         <div class="col s5 offset-s1">
             <h5>Search between birthday dates: </h5>
-            <form action="/employees/findEmployeesByBirthdayBetween" method="get">
+            <form action="/web-app-1.0-SNAPSHOT/employees/findEmployeesByBirthdayBetween" method="get">
                 <input name="birthday" type="date" required>
                 <input name="birthday1" type="date" required>
                 <button class="btn waves-effect waves-light" type="submit">Search</button>
@@ -57,16 +57,16 @@
         </div>
         <hr>
         <div class="center">
-            <p><a class="waves-effect waves-light btn" href="/departments/departmentsWithEmployees">
+            <p><a class="waves-effect waves-light btn" href="/web-app-1.0-SNAPSHOT/departments/departmentsWithEmployees">
                 Departments with employees</a>
-            <a class="waves-effect waves-light btn" href="/departments">Departments</a>
-            <a class="waves-effect waves-light btn" href="/employees">Show all</a></p>
+            <a class="waves-effect waves-light btn" href="/web-app-1.0-SNAPSHOT/departments">Departments</a>
+            <a class="waves-effect waves-light btn" href="/web-app-1.0-SNAPSHOT/employees">Show all</a></p>
         </div>
     </div>
     <div class="row card">
         <div class="col s5">
             <h5>Add new employee</h5>
-            <form action="/employees/insert" method="post">
+            <form action="/web-app-1.0-SNAPSHOT/employees/insert" method="post">
                 <input placeholder="employee name" name="fullName" type="text" required>
                 <input placeholder="department id" name="department_id" type="text" pattern="^[ 0-9]+$" required>
                 <input placeholder="birthday date" name="birthday" type="date" required>
@@ -76,7 +76,7 @@
         </div>
         <div class="col s5 offset-s1">
             <h5>Update</h5>
-            <form action="/employees/update" method="post">
+            <form action="/web-app-1.0-SNAPSHOT/employees/update" method="post">
                 <input placeholder="id of editable employee" name="id" type="text" pattern="^[ 0-9]+$" required>
                 <input placeholder="employee name" name="fullName" type="text" required>
                 <input placeholder="department id" name="department_id" type="text" pattern="^[ 0-9]+$" required>
@@ -87,7 +87,7 @@
         </div>
         <div class="col s5">
             <h5>Delete employee</h5>
-            <form action="/employees/delete" method="post">
+            <form action="/web-app-1.0-SNAPSHOT/employees/delete" method="post">
                 <input placeholder="employee id" name="id" type="text" pattern="^[ 0-9]+$" required>
                 <button class="btn waves-effect waves-light" type="submit">Delete</button>
             </form>

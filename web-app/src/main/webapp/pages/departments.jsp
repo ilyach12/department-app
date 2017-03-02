@@ -36,22 +36,22 @@
         </div>
         <hr>
         <div class="center">
-            <p><a class="waves-effect waves-light btn" href="/departments/departmentsWithEmployees">With employees</a>
-            <a class="waves-effect waves-light btn" href="/employees">Employees</a>
-            <a class="waves-effect waves-light btn" href="/departments">Show all</a></p>
+            <p><a class="waves-effect waves-light btn" href="/web-app-1.0-SNAPSHOT/departments/departmentsWithEmployees">With employees</a>
+            <a class="waves-effect waves-light btn" href="/web-app-1.0-SNAPSHOT/employees">Employees</a>
+            <a class="waves-effect waves-light btn" href="/web-app-1.0-SNAPSHOT/departments">Show all</a></p>
         </div>
     </div>
     <div class="row card">
         <div class="col s5">
             <h5>Create new department</h5>
-            <form action="/departments/insert" method="post">
+            <form action="/web-app-1.0-SNAPSHOT/departments/insert" method="post">
                 <input placeholder="department name" name="departmentName" type="text" required>
                 <button class="btn waves-effect waves-light" type="submit">Create</button>
             </form>
         </div>
         <div class="col s5 offset-s1">
             <h5>Update</h5>
-            <form action="/departments/update" method="post">
+            <form action="/web-app-1.0-SNAPSHOT/departments/update" method="post">
                 <input placeholder="id of editable department" name="id" type="text" pattern="^[ 0-9]+$" required>
                 <input placeholder="new department name" name="departmentName" type="text" required>
                 <button class="btn waves-effect waves-light" type="submit">Update</button>
@@ -59,7 +59,7 @@
         </div>
         <div class="col s5">
             <h5>Delete department</h5>
-            <form action="/departments/delete" method="post">
+            <form action="/web-app-1.0-SNAPSHOT/departments/delete" method="post">
                 <input placeholder="department name" name="departmentName" type="text" required>
                 <button class="btn waves-effect waves-light" type="submit">Delete</button>
             </form>
