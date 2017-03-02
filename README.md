@@ -10,29 +10,9 @@ For download source code from git use:
 ```
 git clone https://github.com/ilyach12/department-app.git
 ```
-After that you need move into root folder and build war files. For that you just need to run build.bat(Windows) or build.sh(Ubuntu). 
-Now you need build docker images:
-
-```
-cd database
-docker build -t database .
-cd ..
-cd rest
-docker build -t rest .
-cd ..
-cd web-app
-docker build -t web-app .
-```
-
-Launch docker containers: 
-
-```
-docker run -d --rm --name db -p 1521:1521 -p 81:81 database
-
-docker run -d --rm --name rt -p 8080:8080 rest bash -c "/tomcat/bin/catalina.sh run"
-
-docker run -d --rm --name web -p 8081:8080 web-app bash -c "/tomcat/bin/catalina.sh run"
-```
+1. Move into root folder and build war files, docker images and run docker containers. For that you just need to run build.bat(Windows) or build.sh(Ubuntu).
+2. Go to http://localhost:81 in your web browser and configure H2 user with 'root' username and password.
+3. Go to http://localhost:8081/web-app-1.0-SNAPSHOT/departments and use app.
 
 # Application links
 ## For client:
