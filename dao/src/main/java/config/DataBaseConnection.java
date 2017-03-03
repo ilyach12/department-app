@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
@@ -36,12 +39,10 @@ public class DataBaseConnection {
     @Bean
     public DataSource dataSource() {
         BasicDataSource ds = new BasicDataSource();
-
         ds.setUrl(env.getRequiredProperty("db.url"));
         ds.setDriverClassName(env.getRequiredProperty("db.driver"));
         ds.setUsername(env.getRequiredProperty("db.username"));
         ds.setPassword(env.getRequiredProperty("db.password"));
-
         return ds;
     }
 

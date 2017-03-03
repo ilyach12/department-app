@@ -32,8 +32,6 @@ public class JdbcDepartmentsDao implements IDepartmentsDao {
     private String findAllDepartments;
     @Value("${query.findAllDepartmentsWithEmployees}")
     private String findAllDepartmentsWithEmployees;
-    @Value("${query.findOneDepartmentWithEmployees}")
-    private String findOneDepartmentWithEmployees;
     @Value("${query.insertNewDepartment}")
     private String insertNewDepartment;
     @Value("${query.updateDepartment}")
