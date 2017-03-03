@@ -28,7 +28,7 @@ public class DataBaseConnection {
     @Resource
     private Environment env;
 
-    @Value("classpath:db/schema.sql")
+    @Value("classpath:db/db.sql")
     private org.springframework.core.io.Resource schemaScript;
     @Value("classpath:db/data.sql")
     private org.springframework.core.io.Resource dataScript;
