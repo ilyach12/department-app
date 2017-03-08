@@ -1,4 +1,4 @@
-package serviceTest;
+package WebAppServiceTest;
 
 import org.junit.Before;
 import org.junit.Test;

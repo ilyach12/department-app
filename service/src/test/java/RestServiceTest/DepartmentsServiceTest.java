@@ -1,4 +1,4 @@
-package serviceTest;
+package RestServiceTest;
 
 import dao.JdbcDepartmentsDao;
 import model.Department;

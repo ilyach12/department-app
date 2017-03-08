@@ -1,4 +1,4 @@
-package serviceTest;
+package RestServiceTest;
 
 import dao.JdbcEmployeesDao;
 import model.Employees;

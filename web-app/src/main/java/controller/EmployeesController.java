@@ -13,7 +13,7 @@ import java.sql.Date;
 
 /**
  * Client controller. This class returned all needs data on the
- * JSP pages.
+ * HTML pages.
  */
 @RestController
 @RequestMapping("/employees")
@@ -24,9 +24,9 @@ public class EmployeesController {
     private WebAppEmployeesService employeesService;
 
     /**
-     * Gets list of all employees and outputs into employees.jsp.
+     * Gets list of all employees and outputs into employees.
      *
-     * @return employees.jsp with list of all employees
+     * @return employees with list of all employees
      */
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView getAll(){
@@ -40,7 +40,7 @@ public class EmployeesController {
      * equal date takes as parameter.
      *
      * @param birthday b-day date
-     * @return employees.jsp with list of all founded employees
+     * @return employees with list of all founded employees
      */
     @RequestMapping(value = "/findEmployeesByBirthday", method = RequestMethod.GET)
     public ModelAndView getEmployeesByBirthdayDate(@RequestParam("birthday") Date birthday){
@@ -55,7 +55,7 @@ public class EmployeesController {
      *
      * @param birthday first b-day date
      * @param birthday1 second b-day date
-     * @return employees.jsp with list of all founded employees
+     * @return employees with list of all founded employees
      */
     @RequestMapping(value = "/findEmployeesByBirthdayBetween", method = RequestMethod.GET)
     public ModelAndView getEmployeesByBirthdayDateBetween(@RequestParam("birthday") Date birthday,
@@ -68,7 +68,7 @@ public class EmployeesController {
     /**
      * Inset new employee from database.
      *
-     * @return employees.jsp with list of all employees
+     * @return employees. with list of all employees
      */
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     public ModelAndView insertNewEmployee(@RequestParam("fullName") String fullName,
@@ -81,7 +81,7 @@ public class EmployeesController {
     /**
      * Update information about employee by id.
      *
-     * @return employees.jsp with list of all employees
+     * @return employees with list of all employees
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ModelAndView updateEmployeeById(@RequestParam("id") Long id, @RequestParam("fullName") String employeeName,
@@ -94,7 +94,7 @@ public class EmployeesController {
     /**
      * Delete employee from database by id.
      *
-     * @return employees.jsp with list of all employees
+     * @return employees with list of all employees
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ModelAndView deleteEmployeeById(@RequestParam("id") Long id) {

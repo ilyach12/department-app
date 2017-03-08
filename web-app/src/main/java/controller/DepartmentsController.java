@@ -11,7 +11,7 @@ import service.WebAppDepartmentsService;
 
 /**
  * Client controller. This class returned all needs data on the
- * JSP pages.
+ * HTML pages.
  */
 @RestController
 @RequestMapping("/departments")
@@ -22,7 +22,7 @@ public class DepartmentsController {
     private WebAppDepartmentsService departmentsService;
 
     /**
-     * Gets all departments and outputs into departments.jsp
+     * Gets all departments and outputs into departments
      */
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView getAll(){
@@ -48,7 +48,7 @@ public class DepartmentsController {
      * Inserting new department in the database.
      *
      * @param departmentName name of new department
-     * @return list of all departments on departments.jsp
+     * @return list of all departments on departments
      */
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     public ModelAndView insertNewDepartment(@RequestParam("departmentName") String departmentName){
@@ -61,7 +61,7 @@ public class DepartmentsController {
      *
      * @param id id of editable department
      * @param departmentName new name for this department
-     * @return list of all departments on departments.jsp
+     * @return list of all departments on departments
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ModelAndView updateDepartmentById(@RequestParam("id") Long id,
@@ -74,7 +74,7 @@ public class DepartmentsController {
      * Delete department by name.
      *
      * @param departmentName name of department
-     * @return list of all departments on departments.jsp
+     * @return list of all departments on departments
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ModelAndView deleteDepartmentByName(@RequestParam("departmentName") String departmentName){
