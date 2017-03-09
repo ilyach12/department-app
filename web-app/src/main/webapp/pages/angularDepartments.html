@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="/resources/css/style.css" rel="stylesheet">
+    <link href="/resources/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <title>Departments</title>
+<body>
+<div class="container" ng-app="departments" ng-controller="departmentsCtrl">
+    <div class="row card">
+        <div class="col s12">
+            <h4>Departments</h4>
+            <table class="striped">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Department</th>
+                    <th>Average salary</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in data">
+                        <th>{{ x.id }}</th>
+                        <th>{{ x.departmentName }}</th>
+                        <th>{{ x.averageSalary }}</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        <div class="center">
+            <p>
+                <a class="waves-effect waves-light btn" href="/departments/departmentsWithEmployees">With employees</a>
+                <a class="waves-effect waves-light btn" href="/employees">Employees</a>
+                <a class="waves-effect waves-light btn" href="/departments">Show all</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script src="/resources/js/departmentsController.js" type="text/javascript"></script>
+<script src="/resources/js/materialize.min.js" type="text/javascript"></script>
+<script src="/resources/js/jq.js" type="text/javascript"></script>
+</body>
+</html>
