@@ -1,0 +1,76 @@
+<div class="container">
+    <div class="row card">
+        <div class="col s5">
+            <h5>Search by birthday: </h5>
+            <form action="/employees/findEmployeesByBirthday" method="get">
+                <input name="birthday" type="date" required>
+                <input class="btn waves-effect waves-light green lighten-1" type="submit" value="Search">
+            </form>
+        </div>
+        <div class="col s5 offset-s1">
+            <h5>Search between birthday dates: </h5>
+            <form action="/employees/findEmployeesByBirthdayBetween" method="get" style="margin-bottom: 20px">
+                <input name="birthday" type="date" required>
+                <input name="birthday1" type="date" required>
+                <input class="btn waves-effect waves-light green lighten-1" type="submit" value="Search">
+            </form>
+        </div>
+    </div>
+    <div class="row card">
+        <div class="col s12">
+            <h5>Employees</h5>
+            <table class="striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Full name</th>
+                        <th>Department</th>
+                        <th>Birthday</th>
+                        <th>Salary</th>
+                        <th>Department ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let x of employees">
+                        <th>{{ x.id }}</th>
+                        <th>{{ x.fullName }}</th>
+                        <th>{{ x.departmentName }}</th>
+                        <th>{{ x.birthday }}</th>
+                        <th>{{ x.salary }}</th>
+                        <th>{{ x.department_id }}</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row card">
+        <div class="col s5">
+            <h5>Add new employee</h5>
+            <form action="/employees/insert" method="post">
+                <input placeholder="employee name" name="fullName" type="text" required>
+                <input placeholder="department id" name="department_id" type="text" pattern="^[ 0-9]+$" required>
+                <input placeholder="birthday date" name="birthday" type="date" required>
+                <input placeholder="salary" name="salary" type="text" required>
+                <input class="btn waves-effect waves-light green lighten-1" type="submit" value="Add">
+            </form>
+        </div>
+        <div class="col s5 offset-s1">
+            <h5>Update</h5>
+            <form action="/employees/update" method="post">
+                <input placeholder="id of editable employee" name="id" type="text" pattern="^[ 0-9]+$" required>
+                <input placeholder="employee name" name="fullName" type="text" required>
+                <input placeholder="department id" name="department_id" type="text" pattern="^[ 0-9]+$" required>
+                <input placeholder="birthday date" name="birthday" type="date" required>
+                <input placeholder="salary" name="salary" type="text" required>
+                <input class="btn waves-effect waves-light green lighten-1" type="submit" value="Update">
+            </form>
+        </div>
+        <div class="col s5">
+            <h5>Delete employee</h5>
+            <form action="/employees/delete" method="post" style="margin-bottom: 110px">
+                <input placeholder="employee id" name="id" type="text" pattern="^[ 0-9]+$" required>
+                <input class="btn waves-effect waves-light green lighten-1" type="submit" value="Delete">
+            </form>
+        </div>
+    </div>
+</div>

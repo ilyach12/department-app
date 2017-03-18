@@ -5,10 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import service.RestEmployeesService;
 
 import java.sql.Date;
@@ -19,6 +16,7 @@ import java.util.List;
  * relevant mapping on Json format.
  */
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/employees")
 @ComponentScan("service")
 public class EmployeesController {

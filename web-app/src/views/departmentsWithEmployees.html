@@ -1,0 +1,52 @@
+<div class="container">
+    <div class="row card">
+        <div class="col s12">
+            <h5>Departments with employees</h5>
+            <table class="striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Department</th>
+                        <th>Employees</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let x of departmentsWithEmployees">
+                        <th>{{ x.id }}</th>
+                        <th>{{ x.departmentName }}</th>
+                        <th>
+                            <p *ngFor="let a of x.employeesInThisDepartment">
+                                Name: {{ a['fullName'] }} | Salary: {{ a['salary'] }}$
+                                | Birthday date: {{ a['birthday'] }}
+                            </p>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row card">
+        <div class="col s5">
+            <h5>Create new department</h5>
+            <form action="/departments/insert" method="post">
+                <input placeholder="department name" name="departmentName" type="text" required>
+                <input class="btn waves-effect waves-light green lighten-1" type="submit" value="Create">
+            </form>
+        </div>
+        <div class="col s5 offset-s1">
+            <h5>Update</h5>
+            <form action="/departments/update" method="post">
+                <input placeholder="id of editable department" name="id" type="text" pattern="^[ 0-9]+$" required>
+                <input placeholder="new department name" name="departmentName" type="text" required>
+                <input class="btn waves-effect waves-light green lighten-1" type="submit" value="Update">
+            </form>
+        </div>
+        <div class="col s5">
+            <h5>Delete department</h5>
+            <form action="/departments/delete" method="post" style="margin-bottom: 110px">
+                <input placeholder="department name" name="departmentName" type="text" required>
+                <input class="btn waves-effect waves-light green lighten-1" type="submit" value="Delete">
+            </form>
+        </div>
+    </div>
+</div>
