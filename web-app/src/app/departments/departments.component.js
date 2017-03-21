@@ -9,23 +9,32 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var router_1 = require('@angular/router');
 var app_service_1 = require('../service/app.service');
 var DepartmentsComponent = (function () {
-    function DepartmentsComponent(router, appService) {
+    function DepartmentsComponent(appService) {
         var _this = this;
-        this.router = router;
         this.appService = appService;
-        this.appService.getDepartments()
-            .subscribe(function (departments) { _this.departments = departments; });
+        this.appService.getDepartments().subscribe(function (departments) { _this.departments = departments; });
     }
+    DepartmentsComponent.prototype.addDepartment = function (name) {
+        this.appService.addDepartment(name);
+        location.reload();
+    };
+    DepartmentsComponent.prototype.updateDepartment = function (id, name) {
+        this.appService.updateDepartment(id, name);
+        location.reload();
+    };
+    DepartmentsComponent.prototype.deleteDepartment = function (name) {
+        this.appService.deleteDepartment(name);
+        location.reload();
+    };
     DepartmentsComponent = __decorate([
         core_1.Component({
             selector: 'departments',
             templateUrl: '../views/departments.html',
             providers: [app_service_1.AppService]
         }), 
-        __metadata('design:paramtypes', [router_1.Router, app_service_1.AppService])
+        __metadata('design:paramtypes', [app_service_1.AppService])
     ], DepartmentsComponent);
     return DepartmentsComponent;
 }());

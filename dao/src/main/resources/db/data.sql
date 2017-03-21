@@ -1,4 +1,4 @@
-INSERT INTO DEPARTMENT VALUES (1, 'QA'), (2, 'Java'), (3, '.NET'), (4, 'HR');
+INSERT INTO DEPARTMENT VALUES (1, 'QA'), (2, 'Java'), (3, 'NET'), (4, 'HR');
 
 INSERT INTO EMPLOYEES (DEPARTMENT_ID, FULLNAME, BIRTHDAY, SALARY) VALUES (2, 'Petrov Ilya Ivanovich', '1997-08-11', 1100),
   (2, 'Semenyk Fedor Nikolaevich', '1995-03-15', 1000), (2, 'Ivanov Semen Arkadievich', '1992-04-21', 1500),
@@ -9,5 +9,3 @@ INSERT INTO EMPLOYEES (DEPARTMENT_ID, FULLNAME, BIRTHDAY, SALARY) VALUES (2, 'Pe
   (1, 'Cepesh Vlad Aliaxandrovich', '1993-02-21', 1000), (4, 'Tipova Svetlana Sergeevna', '1994-05-15', 1300),
   (4, 'Pihova Olena Evgenievna', '1992-03-28', 1100), (4, 'Girov Andrey Leonidovich', '1992-03-12', 1200),
   (4, 'Baskov Filip Arcadievich', '1985-05-23', 1000);
-
-INSERT INTO USERS (USERNAME, PASSWORD, ROLE) VALUES ('root', 'dc76e9f0c0006e8f919e0c515c66dbba3982f785', 'admin')

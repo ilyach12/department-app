@@ -86,7 +86,7 @@ public class DepartmentsController {
     public List<Department> deleteDepartmentByName(@PathVariable("departmentName") String departmentName){
         logger.info("Removing '" + departmentName + "'...");
         departmentsService.delete(departmentName);
-        logger.info("Row with name '" + departmentName + "' removed successfully");
+        logger.info("Department '" + departmentName + "' removed successfully");
         return departmentsService.getAll();
     }
 }

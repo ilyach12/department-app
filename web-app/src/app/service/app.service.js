@@ -11,19 +11,55 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
 require('rxjs/add/operator/map');
+require('rxjs/add/operator/toPromise');
 var AppService = (function () {
     function AppService(http) {
         this.http = http;
+        this.defaultDepartmentsUrl = 'http://localhost:8080/server/departments';
+        this.defaultEmployeesUrl = 'http://localhost:8080/server/employees';
     }
+    // Departments
     AppService.prototype.getDepartments = function () {
-        return this.http.get('http://localhost:8080/server/departments').map(function (res) { return res.json(); });
+        return this.http.get(this.defaultDepartmentsUrl).map(function (res) { return res.json(); });
     };
     AppService.prototype.getDepartmentsWithEmployees = function () {
-        return this.http.get('http://localhost:8080/server/departments/getAllDepartmentsWithEmployees')
-            .map(function (res) { return res.json(); });
+        return this.http.get(this.defaultDepartmentsUrl + '/getAllDepartmentsWithEmployees').map(function (res) { return res.json(); });
     };
+    AppService.prototype.addDepartment = function (name) {
+        return this.http.post(this.defaultDepartmentsUrl + '/addNewDepartment/departmentName/' + name, [])
+            .toPromise();
+    };
+    AppService.prototype.deleteDepartment = function (name) {
+        return this.http.post(this.defaultDepartmentsUrl + '/remove/department/' + name, [])
+            .toPromise();
+    };
+    AppService.prototype.updateDepartment = function (id, name) {
+        return this.http.post(this.defaultDepartmentsUrl + '/update/departmentId/' + id + '/newName/' + name, [])
+            .toPromise();
+    };
+    // Employees
     AppService.prototype.getEmployees = function () {
-        return this.http.get('http://localhost:8080/server/employees').map(function (res) { return res.json(); });
+        return this.http.get(this.defaultEmployeesUrl).map(function (res) { return res.json(); });
+    };
+    AppService.prototype.findByBirthdayDate = function (date) {
+        return this.http.get(this.defaultEmployeesUrl + '/birthday/' + date).map(function (res) { return res.json(); });
+    };
+    AppService.prototype.findByBirthdayDateBetween = function (date1, date2) {
+        return this.http.get(this.defaultEmployeesUrl + '/birthday/between/' + date1 + '/' + date2).map(function (res) { return res.json(); });
+    };
+    AppService.prototype.addEmployee = function (name, depId, bDay, salary) {
+        return this.http.post(this.defaultEmployeesUrl + '/addNewEmployee/employeeName/' + name +
+            '/departmentId/' + depId + '/birthday/' + bDay + '/salary/' + salary, [])
+            .toPromise();
+    };
+    AppService.prototype.updateEmployee = function (id, name, depId, bDay, salary) {
+        return this.http.post(this.defaultEmployeesUrl + '/updateEmployeeData/employeeId/' + id + '/employeeName/' +
+            name + '/departmentId/' + depId + '/birthday/' + bDay + '/salary/' + salary, [])
+            .toPromise();
+    };
+    AppService.prototype.deleteEmployee = function (id) {
+        this.http.post(this.defaultEmployeesUrl + '/remove/employee/' + id, [])
+            .toPromise();
     };
     AppService = __decorate([
         core_1.Injectable(), 

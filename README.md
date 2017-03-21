@@ -1,27 +1,35 @@
 # Department app
 Web application.
-Client and rest-service for department-app.
+Rest-service on Java and client on AngularJS 2.
 For build and launch project you need installed Apache tomcat, Apache maven, Java 8, H2 database and node.js.
 
-## Ubuntu or Windows
+##Download and run project:
+<ul>
+    <li>
+        ```
+        git clone https://github.com/ilyach12/department-app.git
+        cd department-app
+        bash build.sh
+        ```
+    </li>
+    <li>Run H2 database</li>
+    <li>Launch this war file on Tomcat server and configure context path as "/server"</li>
+    <li>
+        ```
+        cd web-app
+        bash run.sh
+        ```
+    </li>
+    <li>Use application</li>
+</ul>
 
-For download source code from git use: 
-
-```
-git clone https://github.com/ilyach12/department-app.git
-```
-after that you need move into folder with source code and build war file. For that you just need to run build.sh(Ubuntu).
-Now you need launch this war file on Tomcat and configure context path as "/server".
-Next goto /web-app and run build.sh(Ubuntu).
-
-After that you can use application on next URL`s:
-
+## Application usage
 ### Departments
 
-http://localhost:3000/departments - list of all departments
+http://localhost:3000/departments - list of departments
 
-http://localhost:3000/departmentsWithEmployees - list of all departments with list of all employees who works in this department
+http://localhost:3000/departmentsWithEmployees - list of departments with list of employees who works in this department
 
 ### Employees
 
-http://localhost:3000/employees - list of all employees
+http://localhost:3000/employees - list of employees

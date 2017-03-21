@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="row card">
+    <div class="row card" style="padding-top: 20px; padding-left: 20px; padding-bottom: 20px">
         <div class="col s12">
             <h5>Departments</h5>
             <table class="striped">
@@ -20,28 +20,25 @@
             </table>
         </div>
     </div>
-    <div class="row card">
+    <div class="row card" style="padding-top: 20px; padding-left: 20px">
         <div class="col s5">
             <h5>Create new department</h5>
-            <form action="/departments/create" method="post">
-                <input placeholder="department name" type="text" required>
-                <input class="btn waves-effect waves-light green lighten-1" type="submit" value="Create">
-            </form>
+            <input #createDepName placeholder="department name" type="text" required/>
+            <input (click)="addDepartment(createDepName.value); createDepName.value=''"
+                   class="btn waves-effect waves-light green lighten-1" type="submit" value="Create"/>
         </div>
         <div class="col s5 offset-s1">
             <h5>Update</h5>
-            <form action="/departments/update" method="post">
-                <input placeholder="id of editable department" name="id" type="text" pattern="^[ 0-9]+$" required>
-                <input placeholder="new department name" name="departmentName" type="text" required>
-                <input class="btn waves-effect waves-light green lighten-1" type="submit" value="Update">
-            </form>
+            <input #editDepId placeholder="id of editable department" type="text" required>
+            <input #editDepName placeholder="new department name" name="departmentName" type="text" required>
+            <input (click)="updateDepartment(editDepId.value, editDepName.value); editDepId.value=''"
+                   class="btn waves-effect waves-light green lighten-1" type="submit" value="Update">
         </div>
-        <div class="col s5">
+        <div class="col s5" style="margin-bottom: 110px">
             <h5>Delete department</h5>
-            <form action="/departments/delete" method="post" style="margin-bottom: 110px">
-                <input placeholder="department name" name="departmentName" type="text" required>
-                <input class="btn waves-effect waves-light green lighten-1" type="submit" value="Delete">
-            </form>
+            <input #delDepName placeholder="department name" type="text" required>
+            <input (click)="deleteDepartment(delDepName.value); delDepName.value=''"
+                   class="btn waves-effect waves-light green lighten-1" type="submit" value="Delete">
         </div>
     </div>
 </div>

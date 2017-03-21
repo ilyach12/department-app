@@ -1,22 +1,22 @@
 <div class="container">
-    <div class="row card">
+    <div class="row card" style="padding-top: 20px; padding-left: 20px">
         <div class="col s5">
             <h5>Search by birthday: </h5>
-            <form action="/employees/findEmployeesByBirthday" method="get">
-                <input name="birthday" type="date" required>
-                <input class="btn waves-effect waves-light green lighten-1" type="submit" value="Search">
-            </form>
+            <input #birthdayDate type="date" required>
+            <input (click)="findByBirthdayDate(birthdayDate.value); birthdayDate.value=''"
+                   class="btn waves-effect waves-light green lighten-1" type="submit" value="Search">
+            <input (click)="ngOnInit()" class="btn waves-effect waves-light green lighten-1"
+                   style="margin-left: 20px" type="submit" value="Show all">
         </div>
-        <div class="col s5 offset-s1">
+        <div class="col s5 offset-s1" style="margin-bottom: 20px">
             <h5>Search between birthday dates: </h5>
-            <form action="/employees/findEmployeesByBirthdayBetween" method="get" style="margin-bottom: 20px">
-                <input name="birthday" type="date" required>
-                <input name="birthday1" type="date" required>
-                <input class="btn waves-effect waves-light green lighten-1" type="submit" value="Search">
-            </form>
+            <input #birthdayDate1 type="date" required>
+            <input #birthdayDate2 type="date" required>
+            <input (click)="findByBirthdayDateBetween(birthdayDate1.value, birthdayDate2.value); birthdayDate1.value='';
+              birthdayDate2.value=''" class="btn waves-effect waves-light green lighten-1" type="submit" value="Search">
         </div>
     </div>
-    <div class="row card">
+    <div class="row card" style="padding-top: 20px; padding-left: 20px; padding-bottom: 20px">
         <div class="col s12">
             <h5>Employees</h5>
             <table class="striped">
@@ -43,34 +43,33 @@
             </table>
         </div>
     </div>
-    <div class="row card">
+    <div class="row card" style="padding-top: 20px; padding-left: 20px">
         <div class="col s5">
             <h5>Add new employee</h5>
-            <form action="/employees/insert" method="post">
-                <input placeholder="employee name" name="fullName" type="text" required>
-                <input placeholder="department id" name="department_id" type="text" pattern="^[ 0-9]+$" required>
-                <input placeholder="birthday date" name="birthday" type="date" required>
-                <input placeholder="salary" name="salary" type="text" required>
-                <input class="btn waves-effect waves-light green lighten-1" type="submit" value="Add">
-            </form>
+            <input #AName placeholder="employee name" type="text" required>
+            <input #ADepId placeholder="department id" type="text" required>
+            <input #ABday placeholder="birthday date" type="date" required>
+            <input #ASalary placeholder="salary" type="text" required>
+            <input (click)="addEmployee(AName.value, ADepId.value, ABday.value, ASalary.value);
+                   AName.value=''; ADepId.value=''; ABday.value=''; ASalary.value=''"
+                   class="btn waves-effect waves-light green lighten-1" type="submit" value="Add">
         </div>
         <div class="col s5 offset-s1">
             <h5>Update</h5>
-            <form action="/employees/update" method="post">
-                <input placeholder="id of editable employee" name="id" type="text" pattern="^[ 0-9]+$" required>
-                <input placeholder="employee name" name="fullName" type="text" required>
-                <input placeholder="department id" name="department_id" type="text" pattern="^[ 0-9]+$" required>
-                <input placeholder="birthday date" name="birthday" type="date" required>
-                <input placeholder="salary" name="salary" type="text" required>
-                <input class="btn waves-effect waves-light green lighten-1" type="submit" value="Update">
-            </form>
+            <input #UId placeholder="id of editable employee" type="text" required>
+            <input #UName placeholder="employee name" type="text" required>
+            <input #UDepId placeholder="department id" type="text" required>
+            <input #UBday placeholder="birthday date" type="date" required>
+            <input #USal placeholder="salary" type="text" required>
+            <input (click)="updateEmployee(UId.value, UName.value, UDepId.value, UBday.value, USal.value);
+                   UId.value=''; UName.value=''; UDepId.value=''; UBday.value=''; USal.value=''"
+                   class="btn waves-effect waves-light green lighten-1" type="submit" value="Update">
         </div>
-        <div class="col s5">
+        <div class="col s5" style="margin-bottom: 110px">
             <h5>Delete employee</h5>
-            <form action="/employees/delete" method="post" style="margin-bottom: 110px">
-                <input placeholder="employee id" name="id" type="text" pattern="^[ 0-9]+$" required>
-                <input class="btn waves-effect waves-light green lighten-1" type="submit" value="Delete">
-            </form>
+            <input #DId placeholder="employee id" type="text" required>
+            <input (click)="deleteEmployee(DId.value); DId.value=''"
+                   class="btn waves-effect waves-light green lighten-1" type="submit" value="Delete">
         </div>
     </div>
 </div>

@@ -1,5 +1,4 @@
 import { Component }        from '@angular/core';
-import { Router }           from '@angular/router';
 import { AppService }       from '../service/app.service';
 import { Departments }      from '../model/departments';
 
@@ -11,9 +10,23 @@ import { Departments }      from '../model/departments';
 export class WithEmployeesComponent{
   departmentsWithEmployees: Departments[];
 
-  constructor (private router: Router, private appService: AppService) {
+  constructor (private appService: AppService) {
     this.appService.getDepartmentsWithEmployees()
-        .subscribe(departmentsWithEmployees=>
-            { this.departmentsWithEmployees = departmentsWithEmployees });
+        .subscribe(departmentsWithEmployees=>{ this.departmentsWithEmployees = departmentsWithEmployees });
+  }
+
+  addDepartment(name: string){
+    this.appService.addDepartment(name);
+    location.reload();
+  }
+
+  updateDepartment(id: number, name: string){
+    this.appService.updateDepartment(id, name);
+    location.reload();
+  }
+
+  deleteDepartment(name: string){
+    this.appService.deleteDepartment(name);
+    location.reload();
   }
 }
