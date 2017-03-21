@@ -3,33 +3,36 @@ Web application.
 Rest-service on Java and client on AngularJS 2.
 For build and launch project you need installed Apache tomcat, Apache maven, Java 8, H2 database and node.js.
 
-##Download and run project:
+## Download and run project:
+### Download source code
+```
+git clone https://github.com/ilyach12/department-app.git
+```
+
+### Build rest
+```
+cd department-app
+bash build.sh
+```
+        
 <ul>
-    <li>
-        ```
-        git clone https://github.com/ilyach12/department-app.git
-        cd department-app
-        bash build.sh
-        ```
-    </li>
     <li>Run H2 database</li>
-    <li>Launch this war file on Tomcat server and configure context path as "/server"</li>
-    <li>
-        ```
-        cd web-app
-        bash run.sh
-        ```
-    </li>
-    <li>Use application</li>
+    <li>Launch <code>rest/target/rest-1.0-SNAPSHOT.war</code> file on Tomcat server and configure context path as "/server"</li>
 </ul>
+
+### Build and run client
+```
+cd web-app
+bash run.sh
+```
 
 ## Application usage
 ### Departments
 
-http://localhost:3000/departments - list of departments
+<code>http://localhost:3000/departments</code> - list of departments
 
-http://localhost:3000/departmentsWithEmployees - list of departments with list of employees who works in this department
+<code>http://localhost:3000/departmentsWithEmployees</code> - list of departments with list of employees who works in this department
 
 ### Employees
 
-http://localhost:3000/employees - list of employees
+<code>http://localhost:3000/employees</code> - list of employees
