@@ -1,48 +1,30 @@
 package daoTest;
 
 import dao.JdbcDepartmentsDao;
+import daoTest.testConfig.DBContext;
 import model.Department;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {DBContext.class})
+@ActiveProfiles({"database"})
 public class DepartmentDaoTest {
 
-    private EmbeddedDatabase ds;
-    private JdbcDepartmentsDao departmentDao = new JdbcDepartmentsDao();
-    private JdbcTemplate template;
-
-    @Before
-    public void setUp() {
-        ds = new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .addScript("db/testDb/create-db.sql")
-                .addScript("db/testDb/insert-data.sql")
-                .build();
-
-        departmentDao.setDataSource(ds);
-        template = new JdbcTemplate(ds);
-
-        ReflectionTestUtils.setField(departmentDao, "findAllDepartments", "select d.*, avg(e.salary) as averageSalary" +
-                " from department as d left join employees as e on d.id = e.department_id group by d.id");
-        ReflectionTestUtils.setField(departmentDao, "findAllDepartmentsWithEmployees", "select d.*, e.* from" +
-                " department as d left join employees as e on d.id = e.department_id");
-        ReflectionTestUtils.setField(departmentDao, "insertNewDepartment", "insert into department (departmentName)" +
-                " values (:departmentName)");
-        ReflectionTestUtils.setField(departmentDao, "updateDepartment", "update department set" +
-                " departmentName = :departmentName where id=:id");
-        ReflectionTestUtils.setField(departmentDao, "deleteDepartment", "delete from department" +
-                " where lower(departmentName) = lower(:departmentName)");
-    }
+    @Autowired
+    private JdbcDepartmentsDao departmentDao;
+    @Autowired
+    private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Test
     public void testFindAll(){
@@ -57,11 +39,12 @@ public class DepartmentDaoTest {
     }
 
     @Test
+    @DirtiesContext
     public void testUpdate(){
         departmentDao.updateById(2L, ".NET");
 
-        String sql = "select d.* from department as d where departmentName = '.NET'";
-        template.query(sql, (rs, rowNum) -> {
+        String sql = "select * from department where id = 2";
+        jdbcTemplate.query(sql, (rs, rowNum) -> {
             Department department1 = new Department();
             department1.setId(rs.getLong("id"));
             department1.setDepartmentName(rs.getString("departmentName"));
@@ -72,31 +55,18 @@ public class DepartmentDaoTest {
     }
 
     @Test
-    public void testInsert(){
+    @DirtiesContext
+    public void testInsert() {
         departmentDao.insertNewDepartment("Marketing");
         List<Department> departments = departmentDao.findAll();
         assertEquals(5, departments.size());
-
-        String sql = "select d.* from department as d where departmentName = 'Marketing'";
-        template.query(sql, (rs, rowNum) -> {
-            Department department1 = new Department();
-            department1.setId(rs.getLong("id"));
-            department1.setDepartmentName(rs.getString("departmentName"));
-
-            assertEquals("Marketing", department1.getDepartmentName());
-            return department1;
-        });
     }
 
     @Test
+    @DirtiesContext
     public void testDelete(){
         departmentDao.deleteByName("HR");
         List<Department> departments = departmentDao.findAll();
         assertEquals(3, departments.size());
-    }
-
-    @After
-    public void tearDown() {
-        ds.shutdown();
     }
 }

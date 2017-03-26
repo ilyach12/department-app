@@ -1,18 +1,15 @@
 package config;
 
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -38,20 +35,12 @@ public class DataBaseConnection {
      */
     @Bean
     public DataSource dataSource() {
-        BasicDataSource ds = new BasicDataSource();
-        ds.setUrl(env.getRequiredProperty("db.url"));
-        ds.setDriverClassName(env.getRequiredProperty("db.driver"));
-        ds.setUsername(env.getRequiredProperty("db.username"));
-        ds.setPassword(env.getRequiredProperty("db.password"));
-        return ds;
-    }
-
-    @Bean
-    public DataSourceInitializer dataSourceInitializer(final DataSource dataSource) {
-        final DataSourceInitializer initializer = new DataSourceInitializer();
-        initializer.setDataSource(dataSource);
-        initializer.setDatabasePopulator(databasePopulator());
-        return initializer;
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setUrl(env.getRequiredProperty("db.url"));
+        dataSource.setDriverClassName(env.getRequiredProperty("db.driver"));
+        dataSource.setUsername(env.getRequiredProperty("db.username"));
+        dataSource.setPassword(env.getRequiredProperty("db.password"));
+        return dataSource;
     }
 
     /**
@@ -65,7 +54,10 @@ public class DataBaseConnection {
     }
 
     @Bean
-    public RestTemplate restTemplate(){
-        return new RestTemplate();
+    public DataSourceInitializer dataSourceInitializer(final DataSource dataSource) {
+        final DataSourceInitializer initializer = new DataSourceInitializer();
+        initializer.setDataSource(dataSource);
+        initializer.setDatabasePopulator(databasePopulator());
+        return initializer;
     }
 }

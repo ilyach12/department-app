@@ -39,7 +39,6 @@ public class JdbcDepartmentsDao implements IDepartmentsDao {
     @Value("${query.deleteDepartment}")
     private String deleteDepartment;
 
-    @Override
     @Autowired
     public void setDataSource(DataSource dataSource) {
         jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
@@ -102,7 +101,7 @@ public class JdbcDepartmentsDao implements IDepartmentsDao {
      */
     @Override
     public void insertNewDepartment(String departmentName) {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>(1);
         map.put("departmentName", departmentName);
         jdbcTemplate.update(insertNewDepartment, map);
     }
@@ -128,7 +127,7 @@ public class JdbcDepartmentsDao implements IDepartmentsDao {
      */
     @Override
     public void deleteByName(String departmentName) {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>(1);
         map.put("departmentName", departmentName);
         jdbcTemplate.update(deleteDepartment, map);
     }

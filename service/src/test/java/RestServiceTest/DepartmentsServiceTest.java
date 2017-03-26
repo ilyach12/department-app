@@ -1,57 +1,34 @@
 package RestServiceTest;
 
-import dao.JdbcDepartmentsDao;
+import RestServiceTest.serviceConfig.ServiceCtx;
 import model.Department;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import service.RestDepartmentsService;
 
-import javax.servlet.ServletException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {ServiceCtx.class})
+@ActiveProfiles({"service"})
 public class DepartmentsServiceTest {
 
-    private EmbeddedDatabase ds;
-    private JdbcTemplate template;
-    private RestDepartmentsService departmentsService = new RestDepartmentsService();
-
-    @Before
-    public void setUp()throws ServletException {
-        ds = new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .addScript("db/create-db.sql")
-                .addScript("db/insert-data.sql")
-                .build();
-
-        template = new JdbcTemplate(ds);
-        JdbcDepartmentsDao departmentDao = new JdbcDepartmentsDao();
-        departmentDao.setDataSource(ds);
-
-        ReflectionTestUtils.setField(departmentsService, "departmentDao", departmentDao);
-        ReflectionTestUtils.setField(departmentDao, "findAllDepartments", "select d.*, avg(e.salary) as averageSalary" +
-                " from department as d left join employees as e on d.id = e.department_id group by d.id");
-        ReflectionTestUtils.setField(departmentDao, "findAllDepartmentsWithEmployees", "select d.*, e.* from" +
-                " department as d left join employees as e on d.id = e.department_id");
-        ReflectionTestUtils.setField(departmentDao, "insertNewDepartment", "insert into department (departmentName)" +
-                " values (:departmentName)");
-        ReflectionTestUtils.setField(departmentDao, "updateDepartment", "update department set" +
-                " departmentName = :departmentName where id=:id");
-        ReflectionTestUtils.setField(departmentDao, "deleteDepartment", "delete from department" +
-                " where lower(departmentName) = lower(:departmentName)");
-    }
+    @Autowired
+    private NamedParameterJdbcTemplate jdbcTemplate;
+    @Autowired
+    private RestDepartmentsService departmentsService;
 
     @Test
     public void testGetAll(){
         List<Department> departments = departmentsService.getAll();
-        assertEquals(4, departments.size());
+        assertEquals(3, departments.size());
     }
 
     @Test
@@ -63,9 +40,9 @@ public class DepartmentsServiceTest {
     @Test
     public void testUpdate(){
         departmentsService.update(2L, ".NET");
-        String sql = "select d.* from department as d where departmentName = '.NET'";
+        String sql = "select * from department where id = 2";
 
-        template.query(sql, (rs, rowNum) -> {
+        jdbcTemplate.query(sql, (rs, rowNum) -> {
             Department department = new Department();
             department.setId(rs.getLong("id"));
             department.setDepartmentName(rs.getString("departmentName"));
@@ -79,17 +56,7 @@ public class DepartmentsServiceTest {
     public void testInsert(){
         departmentsService.insert("Marketing");
         List<Department> departments = departmentsService.getAll();
-        assertEquals(5, departments.size());
-
-        String sql = "select d.* from department as d where departmentName = 'Marketing'";
-        template.query(sql, (rs, rowNum) -> {
-            Department department = new Department();
-            department.setId(rs.getLong("id"));
-            department.setDepartmentName(rs.getString("departmentName"));
-
-            assertEquals("Marketing", department.getDepartmentName());
-            return department;
-        });
+        assertEquals(4, departments.size());
     }
 
     @Test
@@ -97,10 +64,5 @@ public class DepartmentsServiceTest {
         departmentsService.delete("HR");
         List<Department> departments = departmentsService.getAll();
         assertEquals(3, departments.size());
-    }
-
-    @After
-    public void tearDown() {
-        ds.shutdown();
     }
 }

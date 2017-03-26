@@ -54,7 +54,7 @@ public class EmployeesController {
      * @param birthday1 second date of b-day
      * @return List of all founded employees
      */
-    @RequestMapping(value = "/birthday/between/{birthday}/{birthday1}", method = RequestMethod.GET)
+    @RequestMapping(value = "/birthday/{birthday}/{birthday1}", method = RequestMethod.GET)
     public List<Employees> getEmployeesByBirthdayDateBetween(@PathVariable("birthday") Date birthday,
                                                              @PathVariable("birthday1") Date birthday1){
         return employeesService.getEmployeesByBirthdayDateBetween(birthday, birthday1);
@@ -65,8 +65,7 @@ public class EmployeesController {
      *
      * @return List of all employees
      */
-    @RequestMapping(value = "/addNewEmployee/employeeName/{employeeName}/departmentId/{department_id}/" +
-            "birthday/{birthday}/salary/{salary}", method = RequestMethod.POST)
+    @RequestMapping(value = "/add/{employeeName}/{department_id}/{birthday}/{salary}", method = RequestMethod.POST)
     public List<Employees> insertNewEmployee(@PathVariable("employeeName") String employeeName,
                            @PathVariable("department_id") Long department_id, @PathVariable("birthday") Date birthday,
                            @PathVariable("salary") int salary){
@@ -81,8 +80,8 @@ public class EmployeesController {
      *
      * @return List of all employees
      */
-    @RequestMapping(value = "/updateEmployeeData/employeeId/{id}/employeeName/{employeeName}/" +
-            "departmentId/{department_id}/birthday/{birthday}/salary/{salary}", method = RequestMethod.POST)
+    @RequestMapping(value = "/update/{id}/{employeeName}/{department_id}/{birthday}/{salary}",
+            method = RequestMethod.POST)
     public List<Employees> updateEmployeeDataById(@PathVariable("id") Long id,
                                                   @PathVariable("employeeName") String employeeName,
                                                   @PathVariable("department_id") Long department_id,
@@ -99,7 +98,7 @@ public class EmployeesController {
      * @param id id of employee who must be deleted
      * @return List of all employees
      */
-    @RequestMapping(value = "/remove/employee/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/remove/{id}", method = RequestMethod.POST)
     public List<Employees> deleteEmployeeById(@PathVariable("id") Long id){
         employeesService.delete(id);
         logger.info("employee with " + id + " deleted successful");

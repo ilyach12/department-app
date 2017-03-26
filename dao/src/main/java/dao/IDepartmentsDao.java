@@ -1,13 +1,12 @@
 package dao;
 
 import model.Department;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 public interface IDepartmentsDao {
 
-    void setDataSource(DataSource dataSource);
     List<Department> findAll();
     List<Department> findAllWithEmployees();
     void insertNewDepartment(String departmentName);

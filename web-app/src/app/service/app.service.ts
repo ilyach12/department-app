@@ -18,21 +18,21 @@ export class AppService {
   }
 
   getDepartmentsWithEmployees () {
-    return this.http.get(this.defaultDepartmentsUrl + '/getAllDepartmentsWithEmployees').map(res=>res.json());
+    return this.http.get(this.defaultDepartmentsUrl + '/employees').map(res=>res.json());
   }
 
   addDepartment(name: string){
-    return this.http.post(this.defaultDepartmentsUrl + '/addNewDepartment/departmentName/' + name, [])
+    return this.http.post(this.defaultDepartmentsUrl + '/add/' + name, [])
       .toPromise();
   }
 
   deleteDepartment(name: string){
-    return this.http.post(this.defaultDepartmentsUrl + '/remove/department/' + name, [])
+    return this.http.post(this.defaultDepartmentsUrl + '/remove/' + name, [])
       .toPromise();
   }
 
   updateDepartment(id: number, name: string){
-    return this.http.post(this.defaultDepartmentsUrl + '/update/departmentId/' + id + '/newName/' + name, [])
+    return this.http.post(this.defaultDepartmentsUrl + '/update/' + id + '/' + name, [])
       .toPromise();
   }
 
@@ -46,23 +46,22 @@ export class AppService {
   }
 
   findByBirthdayDateBetween(date1: string, date2:string){
-    return this.http.get(this.defaultEmployeesUrl + '/birthday/between/' + date1 + '/' + date2).map(res=>res.json());
+    return this.http.get(this.defaultEmployeesUrl + '/birthday/' + date1 + '/' + date2).map(res=>res.json());
   }
 
   addEmployee(name: string, depId: number, bDay: string, salary: number){
-    return this.http.post(this.defaultEmployeesUrl + '/addNewEmployee/employeeName/' + name +
-      '/departmentId/' + depId + '/birthday/' + bDay + '/salary/' + salary, [])
+    return this.http.post(this.defaultEmployeesUrl + '/add/' + name + '/' + depId + '/' + bDay + '/' + salary, [])
         .toPromise();
   }
 
   updateEmployee(id: number, name: string, depId: number, bDay: string, salary: number){
-    return this.http.post(this.defaultEmployeesUrl + '/updateEmployeeData/employeeId/' + id + '/employeeName/' +
-      name + '/departmentId/' + depId + '/birthday/' + bDay + '/salary/' + salary, [])
+    return this.http.post(this.defaultEmployeesUrl + '/update/' + id + '/'
+      + name + '/' + depId + '/' + bDay + '/' + salary, [])
         .toPromise();
   }
 
   deleteEmployee(id: string){
-    this.http.post(this.defaultEmployeesUrl + '/remove/employee/' + id, [])
+    this.http.post(this.defaultEmployeesUrl + '/remove/' + id, [])
         .toPromise();
   }
 }

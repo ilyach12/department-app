@@ -41,7 +41,7 @@ public class DepartmentsController {
      *
      * @return List of all departments with employees list
      */
-    @RequestMapping(value = "/getAllDepartmentsWithEmployees", method = RequestMethod.GET)
+    @RequestMapping(value = "/employees", method = RequestMethod.GET)
     public List<Department> getAllDepartmentsWithEmployees(){
         return departmentsService.getAllDepartmentsWithEmployees();
     }
@@ -52,7 +52,7 @@ public class DepartmentsController {
      * @param departmentName name of new department
      * @return List of all departments
      */
-    @RequestMapping(value = "/addNewDepartment/departmentName/{departmentName}", method = RequestMethod.POST)
+    @RequestMapping(value = "/add/{departmentName}", method = RequestMethod.POST)
     public List<Department> insertNewDepartment(@PathVariable("departmentName") String departmentName) {
         logger.info("Creating department: " + departmentName);
         departmentsService.insert(departmentName);
@@ -67,7 +67,7 @@ public class DepartmentsController {
      * @param departmentName new name for this department
      * @return List of all departments
      */
-    @RequestMapping(value = "/update/departmentId/{id}/newName/{departmentName}", method = RequestMethod.POST)
+    @RequestMapping(value = "/update/{id}/{departmentName}", method = RequestMethod.POST)
     public List<Department> updateDepartmentNameById(@PathVariable("id") Long id,
                                                      @PathVariable("departmentName") String departmentName){
         logger.info("Updating department name with id: " + id);
@@ -82,7 +82,7 @@ public class DepartmentsController {
      * @param departmentName name of department
      * @return List of all departments
      */
-    @RequestMapping(value = "/remove/department/{departmentName}", method = RequestMethod.POST)
+    @RequestMapping(value = "/remove/{departmentName}", method = RequestMethod.POST)
     public List<Department> deleteDepartmentByName(@PathVariable("departmentName") String departmentName){
         logger.info("Removing '" + departmentName + "'...");
         departmentsService.delete(departmentName);

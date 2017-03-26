@@ -42,7 +42,6 @@ public class JdbcEmployeesDao implements IEmployeesDao {
     @Value("${query.deleteEmployee}")
     private String deleteEmployee;
 
-    @Override
     @Autowired
     public void setDataSource(DataSource dataSource) {
         jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);

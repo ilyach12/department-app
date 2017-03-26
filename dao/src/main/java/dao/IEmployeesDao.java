@@ -1,14 +1,13 @@
 package dao;
 
 import model.Employees;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import javax.sql.DataSource;
 import java.sql.Date;
 import java.util.List;
 
 public interface IEmployeesDao {
 
-    void setDataSource(DataSource dataSource);
     List<Employees> findAll();
     List<Employees> findByBirthdayDate(Date birthday);
     List<Employees> findByBirthdayBetween(Date birthday, Date birthday1);
