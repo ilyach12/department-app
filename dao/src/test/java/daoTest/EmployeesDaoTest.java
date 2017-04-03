@@ -40,7 +40,7 @@ public class EmployeesDaoTest {
     @Test
     public void testFindAll(){
         List<Employees> employees = employeesDao.findAll();
-        assertEquals(16, employees.size());
+        assertEquals(12, employees.size());
     }
 
     @Test
@@ -55,14 +55,14 @@ public class EmployeesDaoTest {
         String birthday = "1992-01-01";
         String birthday1 = "1995-01-01";
         List<Employees> employees = employeesDao.findByBirthdayBetween(Date.valueOf(birthday), Date.valueOf(birthday1));
-        assertEquals(6, employees.size());
+        assertEquals(4, employees.size());
     }
 
     @Test
     public void testInsert(){
         employeesDao.insertNewEmployee("Arkadiy", 2L, Date.valueOf("1985-06-14"), 1250);
         List<Employees> allEmployees = employeesDao.findAll();
-        assertEquals(16, allEmployees.size());
+        assertEquals(12, allEmployees.size());
     }
 
     @Test
@@ -88,6 +88,6 @@ public class EmployeesDaoTest {
     public void testDelete(){
         employeesDao.deleteById(2L);
         List<Employees> employees = employeesDao.findAll();
-        assertEquals(15, employees.size());
+        assertEquals(11, employees.size());
     }
 }

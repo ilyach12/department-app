@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
+import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import javax.annotation.Resource;
@@ -40,6 +41,7 @@ public class DataBaseConnection {
         dataSource.setDriverClassName(env.getRequiredProperty("db.driver"));
         dataSource.setUsername(env.getRequiredProperty("db.username"));
         dataSource.setPassword(env.getRequiredProperty("db.password"));
+        DatabasePopulatorUtils.execute(databasePopulator(), dataSource);
         return dataSource;
     }
 
@@ -51,13 +53,5 @@ public class DataBaseConnection {
         populator.addScript(schemaScript);
         populator.addScript(dataScript);
         return populator;
-    }
-
-    @Bean
-    public DataSourceInitializer dataSourceInitializer(final DataSource dataSource) {
-        final DataSourceInitializer initializer = new DataSourceInitializer();
-        initializer.setDataSource(dataSource);
-        initializer.setDatabasePopulator(databasePopulator());
-        return initializer;
     }
 }

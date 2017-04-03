@@ -40,7 +40,7 @@ public class EmployeesControllerTest {
     @Test
     public void testGetAllEmployees(){
         List<Employees> employees = employeesController.getAllEmployees();
-        assertEquals(12, employees.size());
+        assertEquals(10, employees.size());
     }
 
     @Test
@@ -56,14 +56,14 @@ public class EmployeesControllerTest {
         String birthday1 = "1995-01-01";
         List<Employees> employees = employeesController.getEmployeesByBirthdayDateBetween(Date.valueOf(birthday),
                 Date.valueOf(birthday1));
-        assertEquals(3, employees.size());
+        assertEquals(2, employees.size());
     }
 
     @Test
     public void testInsert(){
         employeesController.insertNewEmployee("Arkadiy", 2L, Date.valueOf("1985-06-14"), 1250);
         List<Employees> allEmployees = employeesController.getAllEmployees();
-        assertEquals(12, allEmployees.size());
+        assertEquals(10, allEmployees.size());
     }
 
     @Test
@@ -89,6 +89,6 @@ public class EmployeesControllerTest {
     public void testDelete(){
         employeesController.deleteEmployeeById(2L);
         List<Employees> employees = employeesController.getAllEmployees();
-        assertEquals(11, employees.size());
+        assertEquals(9, employees.size());
     }
 }

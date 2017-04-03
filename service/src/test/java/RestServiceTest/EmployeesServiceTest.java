@@ -29,7 +29,7 @@ public class EmployeesServiceTest {
     @Test
     public void testGetAll(){
         List<Employees> employees = employeesService.getAll();
-        assertEquals(11, employees.size());
+        assertEquals(9, employees.size());
     }
 
     @Test
@@ -45,7 +45,7 @@ public class EmployeesServiceTest {
         String birthday1 = "1995-01-01";
         List<Employees> employees = employeesService.getEmployeesByBirthdayDateBetween(Date.valueOf(birthday),
                 Date.valueOf(birthday1));
-        assertEquals(3, employees.size());
+        assertEquals(2, employees.size());
     }
 
     @Test
@@ -71,13 +71,13 @@ public class EmployeesServiceTest {
     public void testInsert(){
         employeesService.insert("Arkadiy", 2L, Date.valueOf("1985-06-14"), 1250);
         List<Employees> allEmployees = employeesService.getAll();
-        assertEquals(12, allEmployees.size());
+        assertEquals(10, allEmployees.size());
     }
 
     @Test
     public void testDelete(){
         employeesService.delete(2L);
         List<Employees> employees = employeesService.getAll();
-        assertEquals(11, employees.size());
+        assertEquals(9, employees.size());
     }
 }
