@@ -7,13 +7,11 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan("controller")
+@ComponentScan({"com.chaikovsky.controller", "com.chaikovsky.dao", "com.chaikovsky.service"})
 @Profile("controller")
 public class ControllerContext {
 

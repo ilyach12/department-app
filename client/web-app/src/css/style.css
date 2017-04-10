@@ -1,0 +1,15 @@
+body{
+    background: #eeeeee;
+}
+
+hr{
+    margin:20px 3% 20px 3%;
+    height:2px !important;
+    color:#009688;
+    background-color:#009688;
+}
+
+.container{
+    margin-top: 50px !important;
+    margin-bottom: 100px !important;
+}

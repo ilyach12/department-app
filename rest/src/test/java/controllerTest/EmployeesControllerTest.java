@@ -1,9 +1,9 @@
 package controllerTest;
 
-import controller.EmployeesController;
+import com.chaikovsky.controller.EmployeesController;
+import com.chaikovsky.model.Employees;
 import controllerTest.testConfig.ControllerContext;
-import dao.JdbcEmployeesDao;
-import model.Employees;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -11,15 +11,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import service.RestEmployeesService;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.sql.Date;
 import java.util.List;

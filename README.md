@@ -1,38 +1,60 @@
-# Department app
-Web application.
-Rest-service on Java and client on AngularJS 2.
-For build and launch project you need installed Apache tomcat, Apache maven, Java 8, H2 database and node.js.
+# Dockerized department app
+<p>Web application.<br>
+<p>For build and launch project you need installed Apache maven, Java 8 and Docker.</p>
 
-## Download and run project:
-### Download source code
-```
-git clone https://github.com/ilyach12/department-app.git
-```
-
-### Build rest
-```
-cd department-app
-bash build.sh
-```
-        
+## Build
 <ul>
-    <li>Run H2 database</li>
-    <li>Launch <code>rest/target/rest-1.0-SNAPSHOT.war</code> file on Tomcat server and configure context path as "/server"</li>
+    <li>Download source code from repository</li>
+    <li>Move into root folder and run <code>build.sh</code> for build jar files</li>
+    <li>Build docker images:
+        <ul>
+            <li>
+                <code>
+                    cd databse && \<br>
+                    docker build -t database . && \<br>
+                    cd ..
+                </code>
+            </li>
+            <li>
+                <code>
+                    cd rest && \<br>
+                    docker build -t server . && \<br>
+                    cd ..
+                </code>
+            </li>
+            <li>
+                <code>
+                    cd client && \<br>
+                    docker build -t client . && \<br>
+                    cd ..
+                </code>
+            </li>
+        </ul>
+    </li>
+    <li>Then run docker containers:
+        <ul>
+            <li>
+                Build database container: 
+                <code>docker run -d --rm --name db -p 1521:1521 -p 81:81 database</code>
+            </li>
+            <li>Move <code>https://localhost:81</code> and configure db user login and password as `root`</li>
+            <li>
+                Build server container: 
+                <code>docker run -d --rm --name rest -p 8080:8080 server bash -c "java -jar rest-0.0.1-SNAPSHOT.jar"</code>
+            </li>
+            <li>
+                Build client container: 
+                <code>docker run -d --rm --name web -p 3000:3000 client bash -c "cd web-app && npm install && npm start"</code>
+            </li>
+        </ul>
+    </li>
+    <li>Use application on next links:
+        <ul>
+            <li><code>http://localhost:3000/departments</code></li>
+            <li><code>http://localhost:3000/departmentsWithEmployees</code></li>
+            <li><code>http://localhost:3000/employees</code></li>
+        </ul> 
+    </li>
 </ul>
 
-### Build and run client
-```
-cd web-app
-bash run.sh
-```
 
-## Application usage
-### Departments
-
-<code>http://localhost:3000/departments</code> - list of departments
-
-<code>http://localhost:3000/departmentsWithEmployees</code> - list of departments with list of employees who works in this department
-
-### Employees
-
-<code>http://localhost:3000/employees</code> - list of employees

@@ -1,20 +1,16 @@
 package controllerTest;
 
-import controller.DepartmentsController;
+import com.chaikovsky.controller.DepartmentsController;
 import controllerTest.testConfig.ControllerContext;
-import model.Department;
+import com.chaikovsky.model.Department;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
